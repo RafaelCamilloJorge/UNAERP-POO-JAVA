@@ -4,63 +4,47 @@ import java.awt.event.*;
 
 public class LoginView extends JFrame {
 
-    private JLabel labelNome;
-    private JLabel labelSenha;
     private JTextField dfsNome;
     private JPasswordField dfsSenha;
     private JButton buttonLogin;
 
     public LoginView() {
-
-        // Configurações iniciais
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 150);
-        setLayout(new GridBagLayout()); // Usando GridBagLayout
+        setLayout(new GridBagLayout());
 
-        // Criando e configurando o GridBagConstraints para alinhar à esquerda
-        GridBagConstraints gbcLeft = new GridBagConstraints();
-        gbcLeft.anchor = GridBagConstraints.WEST;
-        gbcLeft.insets = new Insets(5, 5, 5, 5); // Adicionando margem
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(2, 10, 5, 5);
 
-        // Criando e configurando o GridBagConstraints para alinhar à direita
-        GridBagConstraints gbcRight = new GridBagConstraints();
-        gbcRight.anchor = GridBagConstraints.WEST;
-        gbcRight.insets = new Insets(5, 5, 5, 5);
-        gbcRight.fill = GridBagConstraints.HORIZONTAL;
-        gbcRight.weightx = 1.0; // Para esticar o campo de texto na horizontal
+        JLabel labelNome = new JLabel("Nome:");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(labelNome, gbc);
 
-        // Adicionando o rótulo e o campo de texto para o nome
-        labelNome = new JLabel("Nome:");
-        gbcLeft.gridx = 0;
-        gbcLeft.gridy = 0;
-        add(labelNome, gbcLeft);
+        dfsNome = new JTextField(15);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        add(dfsNome, gbc);
 
-        dfsNome = new JTextField(15); // Especificando o tamanho do campo de texto
-        gbcRight.gridx = 1;
-        gbcRight.gridy = 0;
-        add(dfsNome, gbcRight);
+        JLabel labelSenha = new JLabel("Senha:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(labelSenha, gbc);
 
-        labelSenha = new JLabel("Senha:");
-        gbcLeft.gridx = 0;
-        gbcLeft.gridy = 1;
-        add(labelSenha, gbcLeft);
+        dfsSenha = new JPasswordField(15);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        add(dfsSenha, gbc);
 
-        dfsSenha = new JPasswordField(15); // Especificando o tamanho do campo de texto
-        gbcRight.gridx = 1;
-        gbcRight.gridy = 1;
-        add(dfsSenha, gbcRight);
-
-
-        // Adicionando o botão de login
         buttonLogin = new JButton("Login");
-        GridBagConstraints gbcButton = new GridBagConstraints();
-        gbcButton.gridx = 0;
-        gbcButton.gridy = 4;
-        gbcButton.gridwidth = 10; // Ocupa duas colunas
-        gbcButton.insets = new Insets(10, 5, 5, 5); // Adicionando margem
-        gbcButton.anchor = GridBagConstraints.CENTER; // Centralizando o botão
-        add(buttonLogin, gbcButton);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(buttonLogin, gbc);
 
         buttonLogin.addActionListener(new ActionListener() {
             @Override
@@ -68,16 +52,18 @@ public class LoginView extends JFrame {
                 String usuario = dfsNome.getText();
                 String senha = new String(dfsSenha.getPassword());
 
-                if (usuario.equals("administrador") && senha.equals("123")) {
-                    JOptionPane.showMessageDialog(LoginView.this, "Login bem-sucedido!");
+                if (usuario.equals("Rafael") && senha.equals("1")) {
+                    openMainView(usuario);
+                    dispose();
                 } else {
                     JOptionPane.showMessageDialog(LoginView.this, "Usuário ou senha inválidos.");
                 }
             }
         });
-
-
     }
 
-
+    private void openMainView(String nomeUsuario) {
+        MainView telaPrincipal = new MainView(nomeUsuario);
+        telaPrincipal.setVisible(true);
+    }
 }
