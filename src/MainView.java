@@ -6,7 +6,7 @@ public class MainView extends JFrame {
 
     private JLabel labelBemVindo;
     private JButton botaoCadastroLivro;
-    private JButton botaoListarLivros; // Novo botão
+    private JButton botaoListarLivros;
 
     public MainView(String nomeUsuario) {
         setTitle("Menu");
