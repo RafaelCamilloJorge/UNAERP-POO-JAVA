@@ -1,61 +1,113 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 public class MainView extends JFrame {
-
+    private JPanel navPanel;
     private JLabel labelBemVindo;
-    private JButton botaoCadastroLivro;
-    private JButton botaoListarLivros;
+    private JPanel panelTabela;
+    private JTable tableLivros;
+    private JButton btnCadastrarLivro;
 
     public MainView(String nomeUsuario) {
         setTitle("Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(800, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
 
         labelBemVindo = new JLabel("Bem-vindo, " + nomeUsuario + "!");
         labelBemVindo.setFont(new Font("Arial", Font.BOLD, 40));
 
-        setLayout(new BorderLayout());
+        btnCadastrarLivro = new JButton("Cadastrar Livro");
 
-        JPanel panelBotoes = new JPanel(new GridBagLayout());
+        // Criar o navPanel com GridBagLayout
+        navPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(10, 0, 0, 0);
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        navPanel.add(labelBemVindo, gbc);
 
-        botaoCadastroLivro = new JButton("Cadastro de Livro");
-        botaoCadastroLivro.addActionListener(new ActionListener() {
+        gbc.gridx = 1;
+        gbc.weightx = 0;
+        navPanel.add(btnCadastrarLivro, gbc);
+
+        add(navPanel, BorderLayout.NORTH);
+        
+        
+        panelTabela = new JPanel(new BorderLayout());
+        panelTabela.setPreferredSize(new Dimension(600, 400));
+        
+       
+        tableLivros = new JTable();
+
+        
+        carregarLivros();
+
+        panelTabela.add(new JScrollPane(tableLivros));        
+        add(panelTabela, BorderLayout.CENTER);
+        setLocationRelativeTo(null);
+
+        btnCadastrarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                abrirCadastroLivro();
+                CadastroLivro cadastroLivro = new CadastroLivro(MainView.this); 
+                cadastroLivro.setVisible(true);
+                carregarLivros();
             }
         });
-        panelBotoes.add(botaoCadastroLivro, gbc);
 
-        // Adicionando o novo botão "Listar Livros"
-        botaoListarLivros = new JButton("Listar Livros");
-        botaoListarLivros.addActionListener(new ActionListener() {
-            @Override
+        JButton btnExcluir = new JButton("Excluir Linha");
+        btnExcluir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                listarLivros();
+                int row = tableLivros.getSelectedRow();
+                if (row >= 0) {
+                    DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
+                    model.removeRow(row);
+                    BancoDeDadosFake.removerLivro(null);
+                } else {
+                    JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para excluir.");
+                }
+
             }
         });
-        gbc.gridx++; // Incrementando a posição X para colocar o novo botão ao lado
-        panelBotoes.add(botaoListarLivros, gbc);
 
-        add(labelBemVindo, BorderLayout.NORTH);
-        add(panelBotoes, BorderLayout.CENTER);
+        navPanel.add(btnExcluir);
+            
+
     }
 
-    private void abrirCadastroLivro() {
-        CadastroLivro cadastroLivro = new CadastroLivro(this);
-        cadastroLivro.setVisible(true);
+    private void carregarLivros() {
+        List<Livro> livros = BancoDeDadosFake.getLivros();
+    
+        // Criar o modelo da tabela com os dados dos livros
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Título");
+        model.addColumn("Autor");
+        model.addColumn("Categoria");
+        model.addColumn("ISBN");
+        model.addColumn("Status");
+        model.addColumn("Prazo Emprestimo");
+    
+        for (Livro livro : livros) {
+            Object[] rowData = {livro.getTitulo(), livro.getAutor(), livro.getCategoria(), livro.getIsbn(), livro.isDisponivel(), livro.getPrazoEmprestimo()};
+            model.addRow(rowData);
+        }
+    
+        tableLivros.setModel(model);
     }
 
-    // Método para listar os livros (a ser implementado)
-    private void listarLivros() {
-        ListarLivros listarLivro = new ListarLivros();
-        listarLivro.setVisible(true);
+
+    
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            MainView mainView = new MainView("Usuário");
+            mainView.setVisible(true);
+        });
     }
 }
