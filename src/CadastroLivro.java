@@ -79,17 +79,19 @@ public class CadastroLivro extends JDialog {
         String isbn = dfsISBNLivro.getText();
         String detalhes = dfsDetalhesLivro.getText();
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
-
+    
         if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || isbn.isEmpty() || detalhes.isEmpty()
                 || prazoEmprestimo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
                     "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        // Criar um novo livro sem a necessidade de passar o ID explicitamente
         Livro novoLivro = new Livro(titulo, autor, categoria, isbn, true, Integer.parseInt(prazoEmprestimo));
         BancoDeDadosFake.adicionarLivro(novoLivro);
-
+    
         JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
     }
+    
 
 }

@@ -16,7 +16,7 @@ public class MainView extends JFrame {
         setTitle("Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
-        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         labelBemVindo = new JLabel("Bem-vindo, " + nomeUsuario + "!");
         labelBemVindo.setFont(new Font("Arial", Font.BOLD, 40));
@@ -37,25 +37,22 @@ public class MainView extends JFrame {
         navPanel.add(btnCadastrarLivro, gbc);
 
         add(navPanel, BorderLayout.NORTH);
-        
-        
+
         panelTabela = new JPanel(new BorderLayout());
         panelTabela.setPreferredSize(new Dimension(600, 400));
-        
-       
+
         tableLivros = new JTable();
 
-        
         carregarLivros();
 
-        panelTabela.add(new JScrollPane(tableLivros));        
+        panelTabela.add(new JScrollPane(tableLivros));
         add(panelTabela, BorderLayout.CENTER);
         setLocationRelativeTo(null);
 
         btnCadastrarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CadastroLivro cadastroLivro = new CadastroLivro(MainView.this); 
+                CadastroLivro cadastroLivro = new CadastroLivro(MainView.this);
                 cadastroLivro.setVisible(true);
                 carregarLivros();
             }
@@ -67,8 +64,9 @@ public class MainView extends JFrame {
                 int row = tableLivros.getSelectedRow();
                 if (row >= 0) {
                     DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
+                    int id = (int) model.getValueAt(row, 0);
                     model.removeRow(row);
-                    BancoDeDadosFake.removerLivro(null);
+                    BancoDeDadosFake.removerLivro(id);
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para excluir.");
                 }
@@ -77,32 +75,28 @@ public class MainView extends JFrame {
         });
 
         navPanel.add(btnExcluir);
-            
-
     }
 
     private void carregarLivros() {
         List<Livro> livros = BancoDeDadosFake.getLivros();
+
     
-        // Criar o modelo da tabela com os dados dos livros
         DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID"); 
         model.addColumn("Título");
         model.addColumn("Autor");
         model.addColumn("Categoria");
         model.addColumn("ISBN");
         model.addColumn("Status");
         model.addColumn("Prazo Emprestimo");
-    
+
         for (Livro livro : livros) {
-            Object[] rowData = {livro.getTitulo(), livro.getAutor(), livro.getCategoria(), livro.getIsbn(), livro.isDisponivel(), livro.getPrazoEmprestimo()};
+            Object[] rowData = {livro.getID(), livro.getTitulo(), livro.getAutor(), livro.getCategoria(), livro.getIsbn(), livro.isDisponivel(), livro.getPrazoEmprestimo()};
             model.addRow(rowData);
         }
-    
+
         tableLivros.setModel(model);
     }
-
-
-    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

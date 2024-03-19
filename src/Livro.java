@@ -1,4 +1,6 @@
 public class Livro {
+    private int id;
+    private static int proximoId = 1;
     private String titulo;
     private String autor;
     private String categoria;
@@ -8,12 +10,18 @@ public class Livro {
 
     // Construtor
     public Livro(String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
+        this.id = proximoId;
+        proximoId++;
         this.titulo = titulo;
         this.autor = autor;
         this.categoria = categoria;
         this.isbn = isbn;
         this.disponivel = disponivel;
         this.prazoEmprestimo = prazoEmprestimo;
+    }
+
+    public int getID(){
+        return id;
     }
 
     // Getters e Setters
