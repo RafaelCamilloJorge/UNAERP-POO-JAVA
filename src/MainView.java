@@ -10,7 +10,12 @@ public class MainView extends JFrame {
     private JLabel labelBemVindo;
     private JPanel panelTabela;
     private JTable tableLivros;
+
     private JButton btnCadastrarLivro;
+    private JButton btnExcluirLivro;
+    private JButton btnEditLivro;
+
+    private JTextField dfsBusca;
 
     public MainView(String nomeUsuario) {
         setTitle("Menu");
@@ -18,25 +23,18 @@ public class MainView extends JFrame {
         setSize(800, 600);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        labelBemVindo = new JLabel("Bem-vindo, " + nomeUsuario + "!");
-        labelBemVindo.setFont(new Font("Arial", Font.BOLD, 40));
+        navPanel = new JPanel(new FlowLayout());
+        add(navPanel, BorderLayout.PAGE_START);
 
         btnCadastrarLivro = new JButton("Cadastrar Livro");
-
-        // Criar o navPanel com GridBagLayout
-        navPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        navPanel.add(labelBemVindo, gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0;
-        navPanel.add(btnCadastrarLivro, gbc);
-
-        add(navPanel, BorderLayout.NORTH);
+        btnCadastrarLivro.setBackground(new Color(65, 105, 225));
+        navPanel.add(btnCadastrarLivro);
+        btnEditLivro = new JButton("Editar Livro");
+        btnEditLivro.setBackground(new Color(34, 139, 34));
+        navPanel.add(btnEditLivro);
+        btnExcluirLivro = new JButton("Excluir Linha");
+        btnExcluirLivro.setBackground(new Color(220, 20, 60)); // Cor vermelha
+        navPanel.add(btnExcluirLivro);
 
         panelTabela = new JPanel(new BorderLayout());
         panelTabela.setPreferredSize(new Dimension(600, 400));
@@ -58,8 +56,31 @@ public class MainView extends JFrame {
             }
         });
 
-        JButton btnExcluir = new JButton("Excluir Linha");
-        btnExcluir.addActionListener(new ActionListener() {
+
+        btnEditLivro.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int row = tableLivros.getSelectedRow();
+                if (row >= 0) {
+                    DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
+                    int id = (int) model.getValueAt(row, 0);
+                    String tituloLivro = (String) model.getValueAt(row, 1);
+                    String autorLivro = (String) model.getValueAt(row, 2);
+                    String categoriaLivro = (String) model.getValueAt(row, 3);
+                    String isbnLivro = (String) model.getValueAt(row, 4);
+                    boolean disponivelLivro = (boolean) model.getValueAt(row, 5);
+                    int prazoEmprestimoLivro = (int) model.getValueAt(row, 6);
+
+                    EditarLivro editLivro = new EditarLivro(MainView.this, id, tituloLivro, autorLivro, categoriaLivro,
+                            isbnLivro, disponivelLivro, prazoEmprestimoLivro);
+                    editLivro.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para editar.");
+                }
+                carregarLivros();
+            }
+        });
+
+        btnExcluirLivro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int row = tableLivros.getSelectedRow();
                 if (row >= 0) {
@@ -70,19 +91,15 @@ public class MainView extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para excluir.");
                 }
-
             }
         });
-
-        navPanel.add(btnExcluir);
     }
 
     private void carregarLivros() {
         List<Livro> livros = BancoDeDadosFake.getLivros();
 
-    
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID"); 
+        model.addColumn("ID");
         model.addColumn("Título");
         model.addColumn("Autor");
         model.addColumn("Categoria");
@@ -91,7 +108,8 @@ public class MainView extends JFrame {
         model.addColumn("Prazo Emprestimo");
 
         for (Livro livro : livros) {
-            Object[] rowData = {livro.getID(), livro.getTitulo(), livro.getAutor(), livro.getCategoria(), livro.getIsbn(), livro.isDisponivel(), livro.getPrazoEmprestimo()};
+            Object[] rowData = { livro.getID(), livro.getTitulo(), livro.getAutor(), livro.getCategoria(),
+                    livro.getIsbn(), livro.isDisponivel(), livro.getPrazoEmprestimo() };
             model.addRow(rowData);
         }
 

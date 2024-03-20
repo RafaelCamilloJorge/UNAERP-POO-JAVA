@@ -24,4 +24,13 @@ public class BancoDeDadosFake {
     public static List<Livro> getLivros() {
         return bancoDeDados;
     }
+
+    public static Livro getLivroPorID(int id) {
+        for (Livro livro : bancoDeDados) {
+            if (livro.getID() == id) {
+                return livro;
+            }
+        }
+        return null;
+    }
 }

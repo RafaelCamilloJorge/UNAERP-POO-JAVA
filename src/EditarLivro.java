@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CadastroLivro extends JDialog {
+public class EditarLivro extends JDialog {
 
     private JLabel labelTituloLivro;
     private JLabel labelAutorLivro;
@@ -17,10 +17,10 @@ public class CadastroLivro extends JDialog {
     private JTextField dfsISBNLivro;
     private JTextField dfnPrazoEmprestimoLivro;
 
-    private JButton buttonCadastrar;
+    private JButton buttonEditar;
 
-    public CadastroLivro(JFrame parent) {
-        super(parent, "Cadastro de Livro", true);
+    public EditarLivro(JFrame parent, int id, String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
+        super(parent, "Editar Livro", true);
         setSize(400, 300);
 
         labelTituloLivro = new JLabel("Título:");
@@ -35,7 +35,13 @@ public class CadastroLivro extends JDialog {
         dfsISBNLivro = new JTextField();
         dfnPrazoEmprestimoLivro = new JTextField();
 
-        buttonCadastrar = new JButton("Cadastrar");
+        buttonEditar = new JButton("Editar");
+
+        dfsTituloLivro.setText(titulo);
+        dfsAutorLivro.setText(autor);
+        dfsCategoriaLivro.setText(categoria);
+        dfsISBNLivro.setText(isbn);
+        dfnPrazoEmprestimoLivro.setText(String.valueOf(prazoEmprestimo));
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -50,23 +56,23 @@ public class CadastroLivro extends JDialog {
         panel.add(dfsISBNLivro);
         panel.add(labelPrazoEmprestimoLivro);
         panel.add(dfnPrazoEmprestimoLivro);
-        panel.add(buttonCadastrar);
+        panel.add(buttonEditar);
 
         setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
 
         setLocationRelativeTo(parent);
 
-        buttonCadastrar.addActionListener(new ActionListener() {
+        buttonEditar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cadastrarLivro();
+                editarLivro(id);
             }
         });
 
     }
 
-    private void cadastrarLivro() {
+    private void editarLivro(int id) {
         String titulo = dfsTituloLivro.getText();
         String autor = dfsAutorLivro.getText();
         String categoria = dfsCategoriaLivro.getText();
@@ -78,10 +84,15 @@ public class CadastroLivro extends JDialog {
                     "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Livro novoLivro = new Livro(titulo, autor, categoria, isbn, true, Integer.parseInt(prazoEmprestimo));
-        BancoDeDadosFake.adicionarLivro(novoLivro);
+        Livro editLivro = BancoDeDadosFake.getLivroPorID(id);
+        editLivro.setTitulo(titulo);
+        editLivro.setAutor(autor);
+        editLivro.setCategoria(categoria);
+        editLivro.setIsbn(isbn);
+        editLivro.setPrazoEmprestimo(Integer.parseInt(prazoEmprestimo));
+        
     
-        JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
+        JOptionPane.showMessageDialog(this, "Livro editado com sucesso!");
     }
     
 
