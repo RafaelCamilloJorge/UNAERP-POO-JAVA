@@ -7,13 +7,13 @@ import java.util.List;
 
 public class MainView extends JFrame {
     private JPanel navPanel;
-    private JLabel labelBemVindo;
     private JPanel panelTabela;
     private JTable tableLivros;
 
     private JButton btnCadastrarLivro;
     private JButton btnExcluirLivro;
     private JButton btnEditLivro;
+    private JButton btnBuscar;
 
     private JTextField dfsBusca;
 
@@ -36,23 +36,39 @@ public class MainView extends JFrame {
         btnExcluirLivro.setBackground(new Color(220, 20, 60)); // Cor vermelha
         navPanel.add(btnExcluirLivro);
 
+        dfsBusca = new JTextField();
+        dfsBusca.setPreferredSize(new Dimension(200, 30));
+        navPanel.add(dfsBusca);
+
+        btnBuscar = new JButton("Buscar");
+        btnBuscar.setBackground(new Color(255, 255, 0)); 
+        navPanel.add(btnBuscar);
+
         panelTabela = new JPanel(new BorderLayout());
         panelTabela.setPreferredSize(new Dimension(600, 400));
 
         tableLivros = new JTable();
 
-        carregarLivros();
+        carregarLivros("");
 
         panelTabela.add(new JScrollPane(tableLivros));
         add(panelTabela, BorderLayout.CENTER);
         setLocationRelativeTo(null);
+
+        btnBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nomeLivro = dfsBusca.getText();
+                carregarLivros(nomeLivro);
+            }
+        });
 
         btnCadastrarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CadastroLivro cadastroLivro = new CadastroLivro(MainView.this);
                 cadastroLivro.setVisible(true);
-                carregarLivros();
+                carregarLivros("");
             }
         });
 
@@ -76,7 +92,7 @@ public class MainView extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para editar.");
                 }
-                carregarLivros();
+                carregarLivros("");
             }
         });
 
@@ -93,10 +109,20 @@ public class MainView extends JFrame {
                 }
             }
         });
+
+        dfsBusca.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nomeLivro = dfsBusca.getText();
+                carregarLivros(nomeLivro);
+            }
+        });
     }
 
-    private void carregarLivros() {
+    private void carregarLivros(String nomeLivro) {
         List<Livro> livros = BancoDeDadosFake.getLivros();
+
+       livros = BancoDeDadosFake.buscarLivrosPorNome(nomeLivro);
 
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
@@ -122,4 +148,6 @@ public class MainView extends JFrame {
             mainView.setVisible(true);
         });
     }
+
+    
 }

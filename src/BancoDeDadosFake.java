@@ -33,4 +33,14 @@ public class BancoDeDadosFake {
         }
         return null;
     }
+
+    public static List<Livro> buscarLivrosPorNome(String nomeLivro) {
+        List<Livro> livrosFiltrados = new ArrayList<>();
+        for (Livro livro : getLivros()) {
+            if (livro.getTitulo().toLowerCase().contains(nomeLivro.toLowerCase())) {
+                livrosFiltrados.add(livro);
+            }
+        }
+        return livrosFiltrados;
+    }
 }
