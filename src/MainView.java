@@ -4,6 +4,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
+
 
 public class MainView extends JFrame {
     private JPanel navPanel;
@@ -38,6 +42,33 @@ public class MainView extends JFrame {
 
         dfsBusca = new JTextField();
         dfsBusca.setPreferredSize(new Dimension(200, 30));
+        dfsBusca.setText("buscar...");
+        dfsBusca.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (dfsBusca.getText().equals("buscar...")) {
+                    dfsBusca.setText("");
+                } else if(dfsBusca.getText().isEmpty()){
+                     dfsBusca.setText("buscar...");
+                } 
+            }
+        
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (dfsBusca.getText().isEmpty()) {
+                    dfsBusca.setText("buscar...");
+                }
+            }
+        });
+        
+        navPanel.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (!dfsBusca.hasFocus()) {
+                    dfsBusca.setText("buscar...");
+                }
+            }
+        });
         navPanel.add(dfsBusca);
 
         btnBuscar = new JButton("Buscar");
