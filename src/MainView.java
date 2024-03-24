@@ -114,9 +114,12 @@ public class MainView extends JFrame {
                     String autorLivro = (String) model.getValueAt(row, 2);
                     String categoriaLivro = (String) model.getValueAt(row, 3);
                     String isbnLivro = (String) model.getValueAt(row, 4);
-                    boolean disponivelLivro = (boolean) model.getValueAt(row, 5);
+                    String disponivelLivroString = (String) model.getValueAt(row, 5);
+                    boolean disponivelLivro = false;
                     int prazoEmprestimoLivro = (int) model.getValueAt(row, 6);
-
+                    if(disponivelLivroString.equals("Disponivel")){
+                        disponivelLivro = true;
+                    }
                     EditarLivro editLivro = new EditarLivro(MainView.this, id, tituloLivro, autorLivro, categoriaLivro,
                             isbnLivro, disponivelLivro, prazoEmprestimoLivro);
                     editLivro.setVisible(true);
@@ -166,7 +169,7 @@ public class MainView extends JFrame {
 
         for (Livro livro : livros) {
             Object[] rowData = { livro.getID(), livro.getTitulo(), livro.getAutor(), livro.getCategoria(),
-                    livro.getIsbn(), livro.isDisponivel(), livro.getPrazoEmprestimo() };
+                    livro.getIsbn(), livro.isDisponivel() ? "Disponivel" : "Indisponivel", livro.getPrazoEmprestimo() };
             model.addRow(rowData);
         }
 

@@ -35,7 +35,7 @@ public class EditarLivro extends JDialog {
         dfsISBNLivro = new JTextField();
         dfnPrazoEmprestimoLivro = new JTextField();
 
-        buttonEditar = new JButton("Editar");
+        buttonEditar = new JButton("Salvar");
 
         dfsTituloLivro.setText(titulo);
         dfsAutorLivro.setText(autor);
