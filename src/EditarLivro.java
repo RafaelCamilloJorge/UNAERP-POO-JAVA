@@ -84,7 +84,7 @@ public class EditarLivro extends JDialog {
                     "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Livro editLivro = BancoDeDadosFake.getLivroPorID(id);
+        Livro editLivro = BancoDeDadosLivro.getLivroPorID(id);
         editLivro.setTitulo(titulo);
         editLivro.setAutor(autor);
         editLivro.setCategoria(categoria);

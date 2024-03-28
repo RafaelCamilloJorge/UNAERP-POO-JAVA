@@ -79,7 +79,7 @@ public class CadastroLivro extends JDialog {
             return;
         }
         Livro novoLivro = new Livro(titulo, autor, categoria, isbn, true, Integer.parseInt(prazoEmprestimo));
-        BancoDeDadosFake.adicionarLivro(novoLivro);
+        BancoDeDadosLivro.adicionarLivro(novoLivro);
     
         JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
     }

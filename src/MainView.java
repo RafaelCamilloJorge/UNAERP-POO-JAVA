@@ -18,9 +18,14 @@ public class MainView extends JFrame {
     private JButton btnExcluirLivro;
     private JButton btnEditLivro;
     private JButton btnBuscar;
-
-    private JTextField dfsBusca;
-
+    private JLabel tituloLabel;
+    private JTextField dfsTitulo;
+    private JLabel generoLabel;
+    private JComboBox cbxGenero;
+    private JLabel ISBNLabel;
+    private JTextField dfsISBN;
+    private JLabel autorLabel;
+    private JTextField dfsAutor;
     public MainView(String nomeUsuario) {
         setTitle("Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,54 +38,50 @@ public class MainView extends JFrame {
         btnCadastrarLivro = new JButton("Cadastrar Livro");
         btnCadastrarLivro.setBackground(new Color(65, 105, 225));
         navPanel.add(btnCadastrarLivro);
+
         btnEditLivro = new JButton("Editar Livro");
         btnEditLivro.setBackground(new Color(34, 139, 34));
         navPanel.add(btnEditLivro);
+
         btnExcluirLivro = new JButton("Excluir Linha");
         btnExcluirLivro.setBackground(new Color(220, 20, 60)); // Cor vermelha
         navPanel.add(btnExcluirLivro);
 
-        dfsBusca = new JTextField();
-        dfsBusca.setPreferredSize(new Dimension(200, 30));
-        dfsBusca.setText("buscar...");
-        dfsBusca.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (dfsBusca.getText().equals("buscar...")) {
-                    dfsBusca.setText("");
-                } else if(dfsBusca.getText().isEmpty()){
-                     dfsBusca.setText("buscar...");
-                } 
-            }
-        
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (dfsBusca.getText().isEmpty()) {
-                    dfsBusca.setText("buscar...");
-                }
-            }
-        });
-        
-        navPanel.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (!dfsBusca.hasFocus()) {
-                    dfsBusca.setText("buscar...");
-                }
-            }
-        });
-        navPanel.add(dfsBusca);
+        tituloLabel = new JLabel("Titulo:");
+        dfsTitulo = new JTextField();
+        dfsTitulo.setPreferredSize(new Dimension(200, 30));
+        navPanel.add(tituloLabel);
+        navPanel.add(dfsTitulo);
+
+        String[] generos = {"", "Ação", "Romance", "Ficção", "Terror"};
+        cbxGenero = new JComboBox(generos);
+        generoLabel = new JLabel("Genero:");
+        navPanel.add(generoLabel);
+        navPanel.add(cbxGenero);
+
+        autorLabel = new JLabel("Autor:");
+        dfsAutor = new JTextField();
+        dfsAutor.setPreferredSize(new Dimension(200, 30));
+        navPanel.add(autorLabel);
+        navPanel.add(dfsAutor);
+
+        ISBNLabel = new JLabel("ISBN:");
+        dfsISBN = new JTextField();
+        dfsISBN.setPreferredSize(new Dimension(200, 30));
+        navPanel.add(ISBNLabel);
+        navPanel.add(dfsISBN);
 
         btnBuscar = new JButton("Buscar");
-        btnBuscar.setBackground(new Color(255, 255, 0)); 
+        btnBuscar.setBackground(new Color(255, 255, 0));
         navPanel.add(btnBuscar);
+
 
         panelTabela = new JPanel(new BorderLayout());
         panelTabela.setPreferredSize(new Dimension(600, 400));
 
         tableLivros = new JTable();
 
-        carregarLivros("");
+        carregarLivros("", "", "", "");
 
         panelTabela.add(new JScrollPane(tableLivros));
         add(panelTabela, BorderLayout.CENTER);
@@ -89,8 +90,11 @@ public class MainView extends JFrame {
         btnBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nomeLivro = dfsBusca.getText();
-                carregarLivros(nomeLivro);
+                String nomeLivro = dfsTitulo.getText();
+                String genero = (String) cbxGenero.getSelectedItem();
+                String ISBN = dfsISBN.getText();
+                String autor = dfsAutor.getText();
+                carregarLivros(nomeLivro, autor, genero, ISBN);
             }
         });
 
@@ -99,7 +103,7 @@ public class MainView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 CadastroLivro cadastroLivro = new CadastroLivro(MainView.this);
                 cadastroLivro.setVisible(true);
-                carregarLivros("");
+            carregarLivros("", "", "", "");
             }
         });
 
@@ -126,7 +130,7 @@ public class MainView extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para editar.");
                 }
-                carregarLivros("");
+                carregarLivros("", "", "", "");
             }
         });
 
@@ -137,27 +141,28 @@ public class MainView extends JFrame {
                     DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
                     int id = (int) model.getValueAt(row, 0);
                     model.removeRow(row);
-                    BancoDeDadosFake.removerLivro(id);
+                    BancoDeDadosLivro.removerLivro(id);
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para excluir.");
                 }
             }
         });
 
-        dfsBusca.addActionListener(new ActionListener() {
+        dfsTitulo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String nomeLivro = dfsBusca.getText();
-                carregarLivros(nomeLivro);
+                String nomeLivro = dfsTitulo.getText();
+                carregarLivros(nomeLivro, "", "", "");
             }
         });
     }
 
-    private void carregarLivros(String nomeLivro) {
-        List<Livro> livros = BancoDeDadosFake.getLivros();
+    private void carregarLivros(String nomeLivro, String autor, String genero, String ISBN) {
+        List<Livro> livros = BancoDeDadosLivro.getLivros();
 
-       livros = BancoDeDadosFake.buscarLivrosPorNome(nomeLivro);
-
+        if((!nomeLivro.contains("buscar...") && !nomeLivro.isBlank()) || !autor.isBlank() || !genero.isBlank() || !ISBN.isBlank()) {
+            livros = BancoDeDadosLivro.buscarLivros(nomeLivro, autor, genero, ISBN);
+        }
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
         model.addColumn("Título");

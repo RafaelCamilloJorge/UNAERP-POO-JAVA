@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class BancoDeDadosFake {
+public class BancoDeDadosLivro {
     private static List<Livro> bancoDeDados = new ArrayList<>();
 
     public static void adicionarLivro(Livro livro) {
@@ -41,6 +41,21 @@ public class BancoDeDadosFake {
                 livrosFiltrados.add(livro);
             }
         }
+        return livrosFiltrados;
+    }
+
+    public static List<Livro> buscarLivros(String nomeLivro, String autor, String genero, String ISBN) {
+        List<Livro> livrosFiltrados = new ArrayList<>();
+
+        for (Livro livro : getLivros()) {
+            if ((!nomeLivro.isBlank() && livro.getTitulo().toLowerCase().contains(nomeLivro.toLowerCase())) ||
+                    (!autor.isBlank() && livro.getAutor().toLowerCase().contains(autor.toLowerCase())) ||
+                    (!genero.isBlank() && livro.getCategoria().toLowerCase().contains(genero.toLowerCase())) ||
+                    (!ISBN.isBlank() && livro.getIsbn().toLowerCase().contains(ISBN.toLowerCase()))) {
+                livrosFiltrados.add(livro);
+            }
+        }
+
         return livrosFiltrados;
     }
 }
