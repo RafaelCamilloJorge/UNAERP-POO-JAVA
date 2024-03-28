@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class EditarLivro extends JDialog {
 
@@ -62,6 +64,17 @@ public class EditarLivro extends JDialog {
         add(panel, BorderLayout.CENTER);
 
         setLocationRelativeTo(parent);
+
+        dfnPrazoEmprestimoLivro.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyTyped(KeyEvent e){
+                String numeros = "0123456789";
+                if (!numeros.contains(e.getKeyChar() + "")) {
+                    e.consume();
+                }
+            }
+
+        });
 
         buttonEditar.addActionListener(new ActionListener() {
             @Override
