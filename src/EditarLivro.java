@@ -106,7 +106,14 @@ public class EditarLivro extends JDialog {
         
     
         JOptionPane.showMessageDialog(this, "Livro editado com sucesso!");
+
     }
-    
+    public void limpaCampos(){
+        dfsTituloLivro.setText("");
+        dfsAutorLivro.setText("");
+        dfsCategoriaLivro.setText("");
+        dfsISBNLivro.setText("");
+        dfnPrazoEmprestimoLivro.setText("");
+    }
 
 }

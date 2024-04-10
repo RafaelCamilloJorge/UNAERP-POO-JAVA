@@ -102,6 +102,16 @@ public class CadastroLivro extends JDialog {
         BancoDeDadosLivro.adicionarLivro(novoLivro);
     
         JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
+        limpaCampos();
+
+    }
+
+    public void limpaCampos(){
+        dfsTituloLivro.setText("");
+        dfsAutorLivro.setText("");
+        dfsCategoriaLivro.setText("");
+        dfsISBNLivro.setText("");
+        dfnPrazoEmprestimoLivro.setText("");
     }
 
     private boolean validaISBN(String isbn) {
