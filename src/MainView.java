@@ -101,7 +101,7 @@ public class MainView extends JFrame {
         btnCadastrarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CadastroLivro cadastroLivro = new CadastroLivro(MainView.this);
+                ManipularLivro cadastroLivro = new ManipularLivro(MainView.this, "Cadastrar Livro", 1, "", "", "", "", true, 0);
                 cadastroLivro.setVisible(true);
             carregarLivros("", "", "", "");
             }
@@ -118,13 +118,10 @@ public class MainView extends JFrame {
                     String autorLivro = (String) model.getValueAt(row, 2);
                     String categoriaLivro = (String) model.getValueAt(row, 3);
                     String isbnLivro = (String) model.getValueAt(row, 4);
-                    String disponivelLivroString = (String) model.getValueAt(row, 5);
-                    boolean disponivelLivro = false;
+                    boolean disponivelLivro = model.getValueAt(row, 5).equals("Disponivel");
                     int prazoEmprestimoLivro = (int) model.getValueAt(row, 6);
-                    if(disponivelLivroString.equals("Disponivel")){
-                        disponivelLivro = true;
-                    }
-                    EditarLivro editLivro = new EditarLivro(MainView.this, id, tituloLivro, autorLivro, categoriaLivro,
+
+                    ManipularLivro editLivro = new ManipularLivro(MainView.this,"Editar Livro", id, tituloLivro, autorLivro, categoriaLivro,
                             isbnLivro, disponivelLivro, prazoEmprestimoLivro);
                     editLivro.setVisible(true);
                 } else {
@@ -133,6 +130,7 @@ public class MainView extends JFrame {
                 carregarLivros("", "", "", "");
             }
         });
+
 
         btnExcluirLivro.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

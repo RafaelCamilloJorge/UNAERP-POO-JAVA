@@ -5,7 +5,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class CadastroLivro extends JDialog {
+public class ManipularLivro extends JDialog {
+
+
+    private String tituloTela;
 
     private JLabel labelTituloLivro;
     private JLabel labelAutorLivro;
@@ -15,14 +18,14 @@ public class CadastroLivro extends JDialog {
 
     private JTextField dfsTituloLivro;
     private JTextField dfsAutorLivro;
-    private JTextField dfsCategoriaLivro;
+    private JComboBox dfsCategoriaLivro;
     private JTextField dfsISBNLivro;
     private JTextField dfnPrazoEmprestimoLivro;
 
-    private JButton buttonCadastrar;
+    private JButton button;
 
-    public CadastroLivro(JFrame parent) {
-        super(parent, "Cadastro de Livro", true);
+    public ManipularLivro(JFrame parent, String tituloTela, int id, String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
+        super(parent, tituloTela, true);
         setSize(400, 300);
 
         labelTituloLivro = new JLabel("Título:");
@@ -33,11 +36,18 @@ public class CadastroLivro extends JDialog {
 
         dfsTituloLivro = new JTextField();
         dfsAutorLivro = new JTextField();
-        dfsCategoriaLivro = new JTextField();
+        String[] generos = {"", "Ação", "Romance", "Ficção", "Terror"};
+        dfsCategoriaLivro = new JComboBox(generos);
         dfsISBNLivro = new JTextField();
         dfnPrazoEmprestimoLivro = new JTextField();
 
-        buttonCadastrar = new JButton("Cadastrar");
+        button = new JButton("Salvar");
+
+        dfsTituloLivro.setText(titulo);
+        dfsAutorLivro.setText(autor);
+        dfsCategoriaLivro.setSelectedItem(categoria);
+        dfsISBNLivro.setText(isbn);
+        dfnPrazoEmprestimoLivro.setText(String.valueOf(prazoEmprestimo));
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -52,12 +62,16 @@ public class CadastroLivro extends JDialog {
         panel.add(dfsISBNLivro);
         panel.add(labelPrazoEmprestimoLivro);
         panel.add(dfnPrazoEmprestimoLivro);
-        panel.add(buttonCadastrar);
+        panel.add(button);
 
         setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
 
         setLocationRelativeTo(parent);
+
+        if (tituloTela == "Cadastrar Livro"){
+            limpaCampos();
+        }
 
         dfnPrazoEmprestimoLivro.addKeyListener(new KeyAdapter(){
             @Override
@@ -67,25 +81,29 @@ public class CadastroLivro extends JDialog {
                     e.consume();
                 }
             }
-
         });
 
-        buttonCadastrar.addActionListener(new ActionListener() {
+        button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cadastrarLivro();
+                if (tituloTela.equals("Editar Livro")) {
+                    editarLivro(id);
+                } else{
+                    cadastrarLivro();
+                }
             }
         });
 
     }
 
+
     private void cadastrarLivro() {
         String titulo = dfsTituloLivro.getText();
         String autor = dfsAutorLivro.getText();
-        String categoria = dfsCategoriaLivro.getText();
+        String categoria = (String) dfsCategoriaLivro.getSelectedItem();
         String isbn = dfsISBNLivro.getText();
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
-    
+
         if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
                     "Erro", JOptionPane.ERROR_MESSAGE);
@@ -98,20 +116,18 @@ public class CadastroLivro extends JDialog {
             return;
         }
 
+        if (BancoDeDadosLivro.isISBNUtilizado(isbn)) {
+            JOptionPane.showMessageDialog(this, "ISBN já foi utilizado por outro livro.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         Livro novoLivro = new Livro(titulo, autor, categoria, isbn, true, Integer.parseInt(prazoEmprestimo));
         BancoDeDadosLivro.adicionarLivro(novoLivro);
-    
+
         JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
         limpaCampos();
 
-    }
-
-    public void limpaCampos(){
-        dfsTituloLivro.setText("");
-        dfsAutorLivro.setText("");
-        dfsCategoriaLivro.setText("");
-        dfsISBNLivro.setText("");
-        dfnPrazoEmprestimoLivro.setText("");
     }
 
     private boolean validaISBN(String isbn) {
@@ -144,6 +160,50 @@ public class CadastroLivro extends JDialog {
         return ultimoCaracter == expectedCheckDigit;
     }
 
+    private void editarLivro(int id) {
+        String titulo = dfsTituloLivro.getText();
+        String autor = dfsAutorLivro.getText();
+        String categoria = (String) dfsCategoriaLivro.getSelectedItem();
+        String isbn = dfsISBNLivro.getText();
+        String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
 
+        if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(!validaISBN(isbn)){
+            JOptionPane.showMessageDialog(this, "ISBN inválido.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!isbn.equals(BancoDeDadosLivro.getLivroPorID(id).getIsbn())) {
+            if (BancoDeDadosLivro.isISBNUtilizado(isbn)) {
+                JOptionPane.showMessageDialog(this, "ISBN já foi utilizado por outro livro.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        Livro editLivro = BancoDeDadosLivro.getLivroPorID(id);
+        editLivro.setTitulo(titulo);
+        editLivro.setAutor(autor);
+        editLivro.setCategoria(categoria);
+        editLivro.setIsbn(isbn);
+        editLivro.setPrazoEmprestimo(Integer.parseInt(prazoEmprestimo));
+
+
+        JOptionPane.showMessageDialog(this, "Livro editado com sucesso!");
+
+    }
+    public void limpaCampos(){
+        dfnPrazoEmprestimoLivro.setText("");
+        dfsTituloLivro.setText("");
+        dfsAutorLivro.setText("");
+        dfsCategoriaLivro.setSelectedIndex(-1);
+        dfsISBNLivro.setText("");
+    }
 
 }

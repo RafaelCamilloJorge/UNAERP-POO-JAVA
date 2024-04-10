@@ -58,4 +58,13 @@ public class BancoDeDadosLivro {
 
         return livrosFiltrados;
     }
+
+    public static boolean isISBNUtilizado(String isbn) {
+        for (Livro livro : getLivros()) {
+            if (livro.getIsbn().equals(isbn)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
