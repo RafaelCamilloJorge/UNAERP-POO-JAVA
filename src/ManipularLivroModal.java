@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class ManipularLivro extends JDialog {
+public class ManipularLivroModal extends JDialog {
 
 
     private String tituloTela;
@@ -15,16 +15,18 @@ public class ManipularLivro extends JDialog {
     private JLabel labelCategoriaLivro;
     private JLabel labelISBNLivro;
     private JLabel labelPrazoEmprestimoLivro;
+    private JLabel labelDisponivel;
 
     private JTextField dfsTituloLivro;
     private JTextField dfsAutorLivro;
     private JComboBox dfsCategoriaLivro;
     private JTextField dfsISBNLivro;
     private JTextField dfnPrazoEmprestimoLivro;
+    private JCheckBox cbxDisponivel;
 
-    private JButton button;
+    private JButton btnButton;
 
-    public ManipularLivro(JFrame parent, String tituloTela, int id, String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
+    public ManipularLivroModal(JFrame parent, String tituloTela, int id, String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
         super(parent, tituloTela, true);
         setSize(400, 300);
 
@@ -33,6 +35,7 @@ public class ManipularLivro extends JDialog {
         labelCategoriaLivro = new JLabel("Categoria:");
         labelISBNLivro = new JLabel("ISBN:");
         labelPrazoEmprestimoLivro = new JLabel("Prazo Emprestimo:");
+        labelDisponivel = new JLabel("Disponível:");
 
         dfsTituloLivro = new JTextField();
         dfsAutorLivro = new JTextField();
@@ -40,14 +43,17 @@ public class ManipularLivro extends JDialog {
         dfsCategoriaLivro = new JComboBox(generos);
         dfsISBNLivro = new JTextField();
         dfnPrazoEmprestimoLivro = new JTextField();
+        cbxDisponivel = new JCheckBox();
 
-        button = new JButton("Salvar");
+
+        btnButton = new JButton("Salvar");
 
         dfsTituloLivro.setText(titulo);
         dfsAutorLivro.setText(autor);
         dfsCategoriaLivro.setSelectedItem(categoria);
         dfsISBNLivro.setText(isbn);
         dfnPrazoEmprestimoLivro.setText(String.valueOf(prazoEmprestimo));
+        cbxDisponivel.setSelected(disponivel);
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -62,7 +68,9 @@ public class ManipularLivro extends JDialog {
         panel.add(dfsISBNLivro);
         panel.add(labelPrazoEmprestimoLivro);
         panel.add(dfnPrazoEmprestimoLivro);
-        panel.add(button);
+        panel.add(labelDisponivel);
+        panel.add(cbxDisponivel);
+        panel.add(btnButton);
 
         setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
@@ -83,7 +91,7 @@ public class ManipularLivro extends JDialog {
             }
         });
 
-        button.addActionListener(new ActionListener() {
+        btnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (tituloTela.equals("Editar Livro")) {
@@ -103,6 +111,7 @@ public class ManipularLivro extends JDialog {
         String categoria = (String) dfsCategoriaLivro.getSelectedItem();
         String isbn = dfsISBNLivro.getText();
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
+        boolean disponivel = cbxDisponivel.isSelected();
 
         if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
@@ -122,7 +131,7 @@ public class ManipularLivro extends JDialog {
             return;
         }
 
-        Livro novoLivro = new Livro(titulo, autor, categoria, isbn, true, Integer.parseInt(prazoEmprestimo));
+        Livro novoLivro = new Livro(titulo, autor, categoria, isbn, disponivel, Integer.parseInt(prazoEmprestimo));
         BancoDeDadosLivro.adicionarLivro(novoLivro);
 
         JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
@@ -166,6 +175,7 @@ public class ManipularLivro extends JDialog {
         String categoria = (String) dfsCategoriaLivro.getSelectedItem();
         String isbn = dfsISBNLivro.getText();
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
+        boolean disponivel = cbxDisponivel.isSelected();
 
         if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
@@ -193,6 +203,7 @@ public class ManipularLivro extends JDialog {
         editLivro.setCategoria(categoria);
         editLivro.setIsbn(isbn);
         editLivro.setPrazoEmprestimo(Integer.parseInt(prazoEmprestimo));
+        editLivro.setDisponivel(disponivel);
 
 
         JOptionPane.showMessageDialog(this, "Livro editado com sucesso!");

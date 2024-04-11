@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
 
 
 public class MainView extends JFrame {
@@ -44,7 +41,7 @@ public class MainView extends JFrame {
         navPanel.add(btnEditLivro);
 
         btnExcluirLivro = new JButton("Excluir Linha");
-        btnExcluirLivro.setBackground(new Color(220, 20, 60)); // Cor vermelha
+        btnExcluirLivro.setBackground(new Color(220, 20, 60));
         navPanel.add(btnExcluirLivro);
 
         tituloLabel = new JLabel("Titulo:");
@@ -101,7 +98,7 @@ public class MainView extends JFrame {
         btnCadastrarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ManipularLivro cadastroLivro = new ManipularLivro(MainView.this, "Cadastrar Livro", 1, "", "", "", "", true, 0);
+                ManipularLivroModal cadastroLivro = new ManipularLivroModal(MainView.this, "Cadastrar Livro", 1, "", "", "", "", true, 0);
                 cadastroLivro.setVisible(true);
             carregarLivros("", "", "", "");
             }
@@ -121,7 +118,7 @@ public class MainView extends JFrame {
                     boolean disponivelLivro = model.getValueAt(row, 5).equals("Disponivel");
                     int prazoEmprestimoLivro = (int) model.getValueAt(row, 6);
 
-                    ManipularLivro editLivro = new ManipularLivro(MainView.this,"Editar Livro", id, tituloLivro, autorLivro, categoriaLivro,
+                    ManipularLivroModal editLivro = new ManipularLivroModal(MainView.this,"Editar Livro", id, tituloLivro, autorLivro, categoriaLivro,
                             isbnLivro, disponivelLivro, prazoEmprestimoLivro);
                     editLivro.setVisible(true);
                 } else {

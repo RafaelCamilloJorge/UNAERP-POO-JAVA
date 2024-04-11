@@ -8,7 +8,6 @@ public class Livro {
     private boolean disponivel;
     private int prazoEmprestimo;
 
-    // Construtor
     public Livro(String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
         this.id = proximoId;
         proximoId++;

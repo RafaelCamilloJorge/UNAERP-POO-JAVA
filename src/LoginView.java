@@ -6,7 +6,7 @@ public class LoginView extends JFrame {
 
     private JTextField dfsNome;
     private JPasswordField dfsSenha;
-    private JButton buttonLogin;
+    private JButton btnLogin;
 
     public LoginView() {
         setTitle("Login");
@@ -38,15 +38,15 @@ public class LoginView extends JFrame {
         gbc.gridy = 1;
         add(dfsSenha, gbc);
 
-        buttonLogin = new JButton("Login");
+        btnLogin = new JButton("Login");
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.CENTER;
-        add(buttonLogin, gbc);
+        add(btnLogin, gbc);
 
-        buttonLogin.addActionListener(new ActionListener() {
+        btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String usuario = dfsNome.getText();
