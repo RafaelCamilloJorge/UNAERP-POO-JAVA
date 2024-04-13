@@ -113,7 +113,7 @@ public class ManipularLivroModal extends JDialog {
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
         boolean disponivel = cbxDisponivel.isSelected();
 
-        if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
+        if (titulo.isEmpty() || autor.isEmpty() || categoria == null || categoria.isBlank() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
                     "Erro", JOptionPane.ERROR_MESSAGE);
             return;
@@ -177,7 +177,7 @@ public class ManipularLivroModal extends JDialog {
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
         boolean disponivel = cbxDisponivel.isSelected();
 
-        if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
+        if (titulo.isEmpty() || autor.isEmpty() || categoria == null || categoria.isBlank() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
                     "Erro", JOptionPane.ERROR_MESSAGE);
             return;
