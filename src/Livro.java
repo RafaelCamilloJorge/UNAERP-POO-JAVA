@@ -1,20 +1,29 @@
 public class Livro {
-    public String titulo;
-    public String autor;
-    public String categoria;
-    public String isbn;
-    public String detalhes;
+    private int id;
+    private static int proximoId = 1;
+    private String titulo;
+    private String autor;
+    private String categoria;
+    private String isbn;
+    private boolean disponivel;
+    private int prazoEmprestimo;
 
-    public Livro(String titulo, String autor, String categoria, String isbn, String detalhes) {
+    public Livro(String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
+        this.id = proximoId;
+        proximoId++;
         this.titulo = titulo;
         this.autor = autor;
         this.categoria = categoria;
         this.isbn = isbn;
-        this.detalhes = detalhes;
+        this.disponivel = disponivel;
+        this.prazoEmprestimo = prazoEmprestimo;
     }
 
-    // Métodos getters e setters para os atributos
+    public int getID(){
+        return id;
+    }
 
+    // Getters e Setters
     public String getTitulo() {
         return titulo;
     }
@@ -47,11 +56,19 @@ public class Livro {
         this.isbn = isbn;
     }
 
-    public String getDetalhes() {
-        return detalhes;
+    public boolean isDisponivel() {
+        return disponivel;
     }
 
-    public void setDetalhes(String detalhes) {
-        this.detalhes = detalhes;
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
+    }
+
+    public int getPrazoEmprestimo() {
+        return prazoEmprestimo;
+    }
+
+    public void setPrazoEmprestimo(int prazoEmprestimo) {
+        this.prazoEmprestimo = prazoEmprestimo;
     }
 }
