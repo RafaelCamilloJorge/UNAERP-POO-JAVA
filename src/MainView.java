@@ -40,7 +40,7 @@ public class MainView extends JFrame {
         btnEditLivro.setBackground(new Color(34, 139, 34));
         navPanel.add(btnEditLivro);
 
-        btnExcluirLivro = new JButton("Excluir Linha");
+        btnExcluirLivro = new JButton("Excluir Livro");
         btnExcluirLivro.setBackground(new Color(220, 20, 60));
         navPanel.add(btnExcluirLivro);
 
