@@ -1,3 +1,8 @@
+package View;
+
+import Entity.BancoDeDadosLivro;
+import connection.Conexao;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

@@ -1,3 +1,8 @@
+package View;
+
+import Entity.Livro;
+import Entity.BancoDeDadosLivro;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -9,11 +14,14 @@ import java.util.List;
 public class MainView extends JFrame {
     private JPanel navPanel;
     private JPanel panelTabela;
+    private JPanel panelButtons;
     private JTable tableLivros;
 
     private JButton btnCadastrarLivro;
     private JButton btnExcluirLivro;
     private JButton btnEditLivro;
+    private JButton btnEmprestarLivro;
+
     private JButton btnBuscar;
     private JLabel tituloLabel;
     private JTextField dfsTitulo;
@@ -34,15 +42,15 @@ public class MainView extends JFrame {
 
         btnCadastrarLivro = new JButton("Cadastrar Livro");
         btnCadastrarLivro.setBackground(new Color(65, 105, 225));
-        navPanel.add(btnCadastrarLivro);
 
         btnEditLivro = new JButton("Editar Livro");
         btnEditLivro.setBackground(new Color(34, 139, 34));
-        navPanel.add(btnEditLivro);
 
         btnExcluirLivro = new JButton("Excluir Livro");
         btnExcluirLivro.setBackground(new Color(220, 20, 60));
-        navPanel.add(btnExcluirLivro);
+
+        btnEmprestarLivro = new JButton("Emprestar Livro");
+        btnEmprestarLivro.setBackground(new Color(171, 48, 255));
 
         tituloLabel = new JLabel("Titulo:");
         dfsTitulo = new JTextField();
@@ -82,6 +90,12 @@ public class MainView extends JFrame {
 
         panelTabela.add(new JScrollPane(tableLivros));
         add(panelTabela, BorderLayout.CENTER);
+        panelButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelButtons.add(btnCadastrarLivro);
+        panelButtons.add(btnEditLivro);
+        panelButtons.add(btnExcluirLivro);
+        panelButtons.add(btnEmprestarLivro);
+        add(panelButtons, BorderLayout.PAGE_END);
         setLocationRelativeTo(null);
 
         btnBuscar.addActionListener(new ActionListener() {
@@ -98,7 +112,8 @@ public class MainView extends JFrame {
         btnCadastrarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ManipularLivroModal cadastroLivro = new ManipularLivroModal(MainView.this, "Cadastrar Livro", 1, "", "", "", "", true, 0);
+                Livro livro = new Livro("", "", "", "", true, 0);
+                ManipularLivroModal cadastroLivro = new ManipularLivroModal(MainView.this, "Cadastrar Livro", livro);
                 cadastroLivro.setVisible(true);
             carregarLivros("", "", "", "");
             }
@@ -111,15 +126,17 @@ public class MainView extends JFrame {
                 if (row >= 0) {
                     DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
                     int id = (int) model.getValueAt(row, 0);
-                    String tituloLivro = (String) model.getValueAt(row, 1);
-                    String autorLivro = (String) model.getValueAt(row, 2);
-                    String categoriaLivro = (String) model.getValueAt(row, 3);
-                    String isbnLivro = (String) model.getValueAt(row, 4);
-                    boolean disponivelLivro = model.getValueAt(row, 5).equals("Disponivel");
-                    int prazoEmprestimoLivro = (int) model.getValueAt(row, 6);
+                    String titulo = (String) model.getValueAt(row, 1);
+                    String autor = (String) model.getValueAt(row, 2);
+                    String categoria = (String) model.getValueAt(row, 3);
+                    String isbn = (String) model.getValueAt(row, 4);
+                    boolean disponivel = model.getValueAt(row, 5).equals("Disponivel");
+                    int prazoEmprestimo = (int) model.getValueAt(row, 6);
 
-                    ManipularLivroModal editLivro = new ManipularLivroModal(MainView.this,"Editar Livro", id, tituloLivro, autorLivro, categoriaLivro,
-                            isbnLivro, disponivelLivro, prazoEmprestimoLivro);
+
+                    Livro livro = new Livro(id, titulo, autor, categoria, isbn, disponivel, prazoEmprestimo);
+
+                    ManipularLivroModal editLivro = new ManipularLivroModal(MainView.this,"Editar Livro", livro);
                     editLivro.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para editar.");

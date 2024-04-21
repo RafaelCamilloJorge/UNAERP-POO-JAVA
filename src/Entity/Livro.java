@@ -1,6 +1,7 @@
+package Entity;
+
 public class Livro {
     private int id;
-    private static int proximoId = 1;
     private String titulo;
     private String autor;
     private String categoria;
@@ -9,8 +10,16 @@ public class Livro {
     private int prazoEmprestimo;
 
     public Livro(String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
-        this.id = proximoId;
-        proximoId++;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.categoria = categoria;
+        this.isbn = isbn;
+        this.disponivel = disponivel;
+        this.prazoEmprestimo = prazoEmprestimo;
+    }
+
+    public Livro(Integer id, String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo){
+        this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.categoria = categoria;
@@ -23,6 +32,9 @@ public class Livro {
         return id;
     }
 
+    public void setID(int id){
+        this.id = id;
+    }
     // Getters e Setters
     public String getTitulo() {
         return titulo;

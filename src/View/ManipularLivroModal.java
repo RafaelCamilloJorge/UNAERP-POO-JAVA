@@ -1,3 +1,8 @@
+package View;
+
+import Entity.BancoDeDadosLivro;
+import Entity.Livro;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +31,7 @@ public class ManipularLivroModal extends JDialog {
 
     private JButton btnButton;
 
-    public ManipularLivroModal(JFrame parent, String tituloTela, int id, String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
+    public ManipularLivroModal(JFrame parent, String tituloTela, Livro livro) {
         super(parent, tituloTela, true);
         setSize(400, 300);
 
@@ -48,12 +53,12 @@ public class ManipularLivroModal extends JDialog {
 
         btnButton = new JButton("Salvar");
 
-        dfsTituloLivro.setText(titulo);
-        dfsAutorLivro.setText(autor);
-        dfsCategoriaLivro.setSelectedItem(categoria);
-        dfsISBNLivro.setText(isbn);
-        dfnPrazoEmprestimoLivro.setText(String.valueOf(prazoEmprestimo));
-        cbxDisponivel.setSelected(disponivel);
+        dfsTituloLivro.setText(livro.getTitulo());
+        dfsAutorLivro.setText(livro.getAutor());
+        dfsCategoriaLivro.setSelectedItem(livro.getCategoria());
+        dfsISBNLivro.setText(livro.getIsbn());
+        dfnPrazoEmprestimoLivro.setText(String.valueOf(livro.getPrazoEmprestimo()));
+        cbxDisponivel.setSelected(livro.isDisponivel());
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -95,7 +100,7 @@ public class ManipularLivroModal extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (tituloTela.equals("Editar Livro")) {
-                    editarLivro(id);
+                    editarLivro(livro.getID());
                 } else{
                     cadastrarLivro();
                 }
@@ -120,24 +125,31 @@ public class ManipularLivroModal extends JDialog {
         }
 
         if(!validaISBN(isbn)){
-            JOptionPane.showMessageDialog(this, "ISBN inválido.",
+            JOptionPane.showMessageDialog(this, "O ISBN deve conter apenas números e hífens.",
                     "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (BancoDeDadosLivro.isISBNUtilizado(isbn)) {
-            JOptionPane.showMessageDialog(this, "ISBN já foi utilizado por outro livro.",
+        try {
+            int prazoEmprestimoInt = Integer.parseInt(prazoEmprestimo);
+            Livro livro = new Livro(titulo, autor, categoria, isbn, disponivel, prazoEmprestimoInt);
+
+            if (BancoDeDadosLivro.isISBNUtilizado(isbn)) {
+                JOptionPane.showMessageDialog(this, "Este ISBN já foi utilizado por outro livro.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            BancoDeDadosLivro.adicionarLivro(livro);
+
+            JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
+            limpaCampos();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "O prazo de empréstimo deve ser um número inteiro.",
                     "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
         }
-
-        Livro novoLivro = new Livro(titulo, autor, categoria, isbn, disponivel, Integer.parseInt(prazoEmprestimo));
-        BancoDeDadosLivro.adicionarLivro(novoLivro);
-
-        JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
-        limpaCampos();
-
     }
+
 
     private boolean validaISBN(String isbn) {
         isbn = isbn.replaceAll("\\s|-", "");
@@ -177,6 +189,9 @@ public class ManipularLivroModal extends JDialog {
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
         boolean disponivel = cbxDisponivel.isSelected();
 
+        int prazoEmprestimoInt = Integer.parseInt(prazoEmprestimo);
+        Livro livro = new Livro(id, titulo, autor, categoria, isbn, disponivel, prazoEmprestimoInt);
+
         if (titulo.isEmpty() || autor.isEmpty() || categoria == null || categoria.isBlank() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
                     "Erro", JOptionPane.ERROR_MESSAGE);
@@ -189,7 +204,7 @@ public class ManipularLivroModal extends JDialog {
             return;
         }
 
-        if (!isbn.equals(BancoDeDadosLivro.getLivroPorID(id).getIsbn())) {
+        if (!isbn.equals(BancoDeDadosLivro.getLivroPorID(livro.getID()).getIsbn())) {
             if (BancoDeDadosLivro.isISBNUtilizado(isbn)) {
                 JOptionPane.showMessageDialog(this, "ISBN já foi utilizado por outro livro.",
                         "Erro", JOptionPane.ERROR_MESSAGE);
@@ -197,13 +212,7 @@ public class ManipularLivroModal extends JDialog {
             }
         }
 
-        Livro editLivro = BancoDeDadosLivro.getLivroPorID(id);
-        editLivro.setTitulo(titulo);
-        editLivro.setAutor(autor);
-        editLivro.setCategoria(categoria);
-        editLivro.setIsbn(isbn);
-        editLivro.setPrazoEmprestimo(Integer.parseInt(prazoEmprestimo));
-        editLivro.setDisponivel(disponivel);
+        BancoDeDadosLivro.editarLivro(livro);
 
 
         JOptionPane.showMessageDialog(this, "Livro editado com sucesso!");
