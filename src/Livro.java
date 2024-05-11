@@ -5,7 +5,7 @@ public class Livro {
     private String categoria;
     private String isbn;
     private boolean disponivel;
-    private int prazoEmprestimo;
+    private Integer prazoEmprestimo;
 
     public Livro(String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
         this.titulo = titulo;
@@ -74,7 +74,7 @@ public class Livro {
         this.disponivel = disponivel;
     }
 
-    public int getPrazoEmprestimo() {
+    public Integer getPrazoEmprestimo() {
         return prazoEmprestimo;
     }
 

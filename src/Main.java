@@ -1,5 +1,3 @@
-package View;
-
 import connection.Conexao;
 
 public class Main {

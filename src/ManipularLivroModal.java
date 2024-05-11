@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 
 public class ManipularLivroModal extends JDialog {
 
+    private LivroController livroController;
+    private LivroDAO livroDAO;
 
     private String tituloTela;
 
@@ -29,6 +31,8 @@ public class ManipularLivroModal extends JDialog {
     public ManipularLivroModal(JFrame parent, String tituloTela, Livro livro) {
         super(parent, tituloTela, true);
         setSize(400, 300);
+
+        livroController = new LivroController(this, livroDAO);
 
         labelTituloLivro = new JLabel("Título:");
         labelAutorLivro = new JLabel("Autor:");
@@ -77,7 +81,7 @@ public class ManipularLivroModal extends JDialog {
 
         setLocationRelativeTo(parent);
 
-        if (tituloTela == "Cadastrar Livro"){
+        if (tituloTela.equals("Cadastrar Livro")){
             limpaCampos();
         }
 
@@ -113,68 +117,13 @@ public class ManipularLivroModal extends JDialog {
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
         boolean disponivel = cbxDisponivel.isSelected();
 
-        if (titulo.isEmpty() || autor.isEmpty() || categoria == null || categoria.isBlank() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        Livro novoLivro = new Livro(titulo, autor, categoria, isbn, disponivel, Integer.parseInt(prazoEmprestimo));
+        livroController.cadastrarLivro(novoLivro);
 
-        if(!validaISBN(isbn)){
-            JOptionPane.showMessageDialog(this, "O ISBN deve conter apenas números e hífens.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            int prazoEmprestimoInt = Integer.parseInt(prazoEmprestimo);
-            Livro livro = new Livro(titulo, autor, categoria, isbn, disponivel, prazoEmprestimoInt);
-
-            if (LivroDAO.isISBNUtilizado(isbn)) {
-                JOptionPane.showMessageDialog(this, "Este ISBN já foi utilizado por outro livro.",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            LivroDAO.adicionarLivro(livro);
-
-            JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
-            limpaCampos();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "O prazo de empréstimo deve ser um número inteiro.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
 
-    private boolean validaISBN(String isbn) {
-        isbn = isbn.replaceAll("\\s|-", "");
 
-        if (isbn.length() != 13) {
-            return false;
-        }
-
-        for (int i = 0; i < 12; i++) {
-            if (!Character.isDigit(isbn.charAt(i))) {
-                return false;
-            }
-        }
-
-        char ultimoCaracter = isbn.charAt(12);
-        if (!Character.isDigit(ultimoCaracter) && ultimoCaracter != 'X') {
-            return false;
-        }
-
-        int sum = 0;
-        for (int i = 0; i < 12; i++) {
-            int digit = Character.getNumericValue(isbn.charAt(i));
-            sum += (i % 2 == 0) ? digit : digit * 3;
-        }
-
-        int checkDigit = (10 - (sum % 10)) % 10;
-        char expectedCheckDigit = (checkDigit == 10) ? '0' : (char) (checkDigit + '0');
-
-        return ultimoCaracter == expectedCheckDigit;
-    }
 
     private void editarLivro(int id) {
         String titulo = dfsTituloLivro.getText();
@@ -184,33 +133,8 @@ public class ManipularLivroModal extends JDialog {
         String prazoEmprestimo = dfnPrazoEmprestimoLivro.getText();
         boolean disponivel = cbxDisponivel.isSelected();
 
-        int prazoEmprestimoInt = Integer.parseInt(prazoEmprestimo);
-        Livro livro = new Livro(id, titulo, autor, categoria, isbn, disponivel, prazoEmprestimoInt);
-
-        if (titulo.isEmpty() || autor.isEmpty() || categoria == null || categoria.isBlank() || isbn.isEmpty() || prazoEmprestimo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos antes de cadastrar o livro.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if(!validaISBN(isbn)){
-            JOptionPane.showMessageDialog(this, "ISBN inválido.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (!isbn.equals(LivroDAO.getLivroPorID(livro.getID()).getIsbn())) {
-            if (LivroDAO.isISBNUtilizado(isbn)) {
-                JOptionPane.showMessageDialog(this, "ISBN já foi utilizado por outro livro.",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        LivroDAO.editarLivro(livro);
-
-
-        JOptionPane.showMessageDialog(this, "Livro editado com sucesso!");
+        Livro novoLivro = new Livro(id, titulo, autor, categoria, isbn, disponivel, Integer.parseInt(prazoEmprestimo));
+        livroController.editarLivro(novoLivro);
 
     }
     public void limpaCampos(){
