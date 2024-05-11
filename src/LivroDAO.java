@@ -1,5 +1,3 @@
-package Entity;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,27 +5,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Entity.Livro;
 import connection.Conexao;
 
-public class BancoDeDadosLivro {
+public class LivroDAO {
     public static void adicionarLivro(Livro livro) {
-        String sql = "INSERT INTO Livro (id, titulo, autor, categoria, isbn, disponivel, prazoEmprestimo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Livro (titulo, autor, categoria, isbn, disponivel, prazoEmprestimo) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = new Conexao().abrirConexao();
              PreparedStatement pstmt = conexao.prepareStatement(sql)) {
 
-            pstmt.setInt(1, livro.getID());
-            pstmt.setString(2, livro.getTitulo());
-            pstmt.setString(3, livro.getAutor());
-            pstmt.setString(4, livro.getCategoria());
-            pstmt.setString(5, livro.getIsbn());
-            pstmt.setBoolean(6, livro.isDisponivel());
-            pstmt.setInt(7, livro.getPrazoEmprestimo());
+            pstmt.setString(1, livro.getTitulo());
+            pstmt.setString(2, livro.getAutor());
+            pstmt.setString(3, livro.getCategoria());
+            pstmt.setString(4, livro.getIsbn());
+            pstmt.setBoolean(5, livro.isDisponivel());
+            pstmt.setInt(6, livro.getPrazoEmprestimo());
 
             pstmt.executeUpdate();
 
-            System.out.println("Entity.Livro adicionado com sucesso.");
+            System.out.println("Livro adicionado com sucesso.");
         } catch (SQLException e) {
             System.out.println("Erro ao adicionar livro: " + e.getMessage());
         }
@@ -43,9 +39,9 @@ public class BancoDeDadosLivro {
             int linhasAfetadas = pstmt.executeUpdate();
 
             if (linhasAfetadas == 0) {
-                System.out.println("Entity.Livro com ID " + id + " não encontrado para remoção.");
+                System.out.println("Livro com ID " + id + " não encontrado para remoção.");
             } else {
-                System.out.println("Entity.Livro removido com sucesso.");
+                System.out.println("Livro removido com sucesso.");
             }
         } catch (SQLException e) {
             System.out.println("Erro ao remover livro: " + e.getMessage());
@@ -100,7 +96,7 @@ public class BancoDeDadosLivro {
                 livro.setID(rs.getInt("id"));
                 return livro;
             } else {
-                System.out.println("Entity.Livro com ID " + id + " não encontrado.");
+                System.out.println("Livro com ID " + id + " não encontrado.");
             }
         } catch (SQLException e) {
             System.out.println("Erro ao obter livro por ID: " + e.getMessage());
@@ -209,7 +205,7 @@ public class BancoDeDadosLivro {
 
 
             if (linhasAfetadas > 0) {
-                System.out.println("Entity.Livro editado com sucesso.");
+                System.out.println("Livro editado com sucesso.");
             } else {
                 System.out.println("Nenhum livro foi editado.");
             }

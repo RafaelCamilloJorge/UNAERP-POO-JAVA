@@ -1,14 +1,10 @@
-package View;
-
-import Entity.Livro;
-import Entity.BancoDeDadosLivro;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
 
 
 public class MainView extends JFrame {
@@ -153,7 +149,7 @@ public class MainView extends JFrame {
                     DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
                     int id = (int) model.getValueAt(row, 0);
                     model.removeRow(row);
-                    BancoDeDadosLivro.removerLivro(id);
+                    LivroDAO.removerLivro(id);
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para excluir.");
                 }
@@ -170,10 +166,10 @@ public class MainView extends JFrame {
     }
 
     private void carregarLivros(String nomeLivro, String autor, String genero, String ISBN) {
-        List<Livro> livros = BancoDeDadosLivro.getLivros();
+        List<Livro> livros = LivroDAO.getLivros();
 
         if((!nomeLivro.contains("buscar...") && !nomeLivro.isBlank()) || !autor.isBlank() || !genero.isBlank() || !ISBN.isBlank()) {
-            livros = BancoDeDadosLivro.buscarLivros(nomeLivro, autor, genero, ISBN);
+            livros = LivroDAO.buscarLivros(nomeLivro, autor, genero, ISBN);
         }
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");

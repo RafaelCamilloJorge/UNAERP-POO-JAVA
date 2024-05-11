@@ -1,8 +1,3 @@
-package View;
-
-import Entity.BancoDeDadosLivro;
-import Entity.Livro;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -134,13 +129,13 @@ public class ManipularLivroModal extends JDialog {
             int prazoEmprestimoInt = Integer.parseInt(prazoEmprestimo);
             Livro livro = new Livro(titulo, autor, categoria, isbn, disponivel, prazoEmprestimoInt);
 
-            if (BancoDeDadosLivro.isISBNUtilizado(isbn)) {
+            if (LivroDAO.isISBNUtilizado(isbn)) {
                 JOptionPane.showMessageDialog(this, "Este ISBN já foi utilizado por outro livro.",
                         "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            BancoDeDadosLivro.adicionarLivro(livro);
+            LivroDAO.adicionarLivro(livro);
 
             JOptionPane.showMessageDialog(this, "Livro cadastrado com sucesso!");
             limpaCampos();
@@ -204,15 +199,15 @@ public class ManipularLivroModal extends JDialog {
             return;
         }
 
-        if (!isbn.equals(BancoDeDadosLivro.getLivroPorID(livro.getID()).getIsbn())) {
-            if (BancoDeDadosLivro.isISBNUtilizado(isbn)) {
+        if (!isbn.equals(LivroDAO.getLivroPorID(livro.getID()).getIsbn())) {
+            if (LivroDAO.isISBNUtilizado(isbn)) {
                 JOptionPane.showMessageDialog(this, "ISBN já foi utilizado por outro livro.",
                         "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
 
-        BancoDeDadosLivro.editarLivro(livro);
+        LivroDAO.editarLivro(livro);
 
 
         JOptionPane.showMessageDialog(this, "Livro editado com sucesso!");

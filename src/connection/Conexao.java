@@ -3,32 +3,34 @@ package connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Conexao {
-    private Connection conexao;
 
-    public Connection abrirConexao(){
-        String url = "jdbc:mysql://localhost:3306/biblioteca";
-        String user = "root";
-        String pass = "root";
-
-        try {
-            conexao = DriverManager.getConnection(url, user, pass);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return conexao;
+    public static Connection abrirConexao() throws SQLException {
+        return DriverManager.getConnection("jdbc:sqlite:tasks.db");
     }
 
-    public void fecharConexao() {
-        if (conexao != null) {
-            try {
-                conexao.close();
-            } catch (SQLException e) {
-                // Lidar com o erro de fechamento da conexão, se necessário
-                e.printStackTrace();
-            }
+    public static void createDatabase() {
+        // Abrir uma conexão com banco de dados
+        try(Connection connection = abrirConexao();
+            Statement statement = connection.createStatement()) {
+
+            String sql = "CREATE TABLE IF NOT EXISTS livro ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "titulo VARCHAR(255) NULL,"
+                    + "autor VARCHAR(255) NULL,"
+                    + "categoria VARCHAR(100) NULL,"
+                    + "isbn VARCHAR(20) NULL,"
+                    + "disponivel INTEGER NULL,"
+                    + "prazoEmprestimo INTEGER NULL"
+                    + ");";
+
+            statement.execute(sql);
+
+
+        } catch (SQLException err) {
+            err.printStackTrace();
         }
     }
 }
