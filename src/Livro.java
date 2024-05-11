@@ -1,4 +1,11 @@
+import javax.persistence.*;
+
+@Entity
+@Table(name = "livro")
 public class Livro {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String titulo;
     private String autor;
@@ -6,6 +13,8 @@ public class Livro {
     private String isbn;
     private boolean disponivel;
     private Integer prazoEmprestimo;
+
+    public Livro(){}
 
     public Livro(String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
         this.titulo = titulo;

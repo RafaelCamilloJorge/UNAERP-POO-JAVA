@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class Conexao {
 
     public static Connection abrirConexao() throws SQLException {
-        return DriverManager.getConnection("jdbc:sqlite:tasks.db");
+        return DriverManager.getConnection("jdbc:sqlite:biblioteca.db");
     }
 
     public static void createDatabase() {
