@@ -1,10 +1,12 @@
-import connection.Conexao;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        Conexao.createDatabase();
-        LoginView login = new LoginView();
-        login.setVisible(true);
-        login.setLocationRelativeTo(null);
+        Conexao.createSessionFactory();
+
+        SwingUtilities.invokeLater(() -> {
+            MainView mainView = new MainView("Rafael");
+            mainView.setVisible(true);
+        });
     }
 }
