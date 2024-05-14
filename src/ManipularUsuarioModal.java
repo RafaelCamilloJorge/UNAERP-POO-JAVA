@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,7 @@ public class ManipularUsuarioModal extends JDialog {
     private JButton btnCreate;
     private JButton btnDelete;
     private JButton btnUpdate;
+    private JButton btnTabela; // Novo botão para tabela
 
     public ManipularUsuarioModal(JFrame parent) {
         super(parent, true);
@@ -38,6 +40,7 @@ public class ManipularUsuarioModal extends JDialog {
         btnCreate = new JButton("Cadastrar");
         btnDelete = new JButton("Excluir");
         btnUpdate = new JButton("Atualizar");
+        btnTabela = new JButton("Tabela"); // Inicializa o novo botão
 
         JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -51,6 +54,7 @@ public class ManipularUsuarioModal extends JDialog {
         panel.add(btnCreate);
         panel.add(btnDelete);
         panel.add(btnUpdate);
+        panel.add(btnTabela); // Adiciona o botão à interface
 
         setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
@@ -64,19 +68,21 @@ public class ManipularUsuarioModal extends JDialog {
             }
         });
 
-//        btnDelete.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                excluirUsuario(usuario.getId());
-//            }
-//        });
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-//        btnUpdate.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                editarUsuario(usuario.getId());
-//            }
-//        });
+                Usuario usuario = new Usuario();
+                excluirUsuario(usuario.getId());
+            }
+        });
+
+        btnTabela.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                exibirTabela();
+            }
+        });
     }
 
     private void cadastrarUsuario() {
@@ -99,6 +105,20 @@ public class ManipularUsuarioModal extends JDialog {
 
     private void excluirUsuario(int id) {
         usuarioController.excluirUsuario(id);
+    }
+
+    private void exibirTabela() {
+        // Crie uma instância da classe UsuarioTableModal
+        DefaultTableModel tableModel = new DefaultTableModel();
+        UsuarioTableModal tabela = new UsuarioTableModal(tableModel);
+
+        // Crie um JDialog para exibir a tabela
+        JDialog tabelaDialog = new JDialog(this, "Tabela de Usuários", true);
+        tabelaDialog.setLayout(new BorderLayout());
+        tabelaDialog.add(new JScrollPane(tabela), BorderLayout.CENTER);
+        tabelaDialog.setSize(600, 400);
+        tabelaDialog.setLocationRelativeTo(this);
+        tabelaDialog.setVisible(true);
     }
 
     public void limpaCampos(){
