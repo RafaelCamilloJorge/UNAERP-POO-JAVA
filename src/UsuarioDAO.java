@@ -74,4 +74,15 @@ public class UsuarioDAO {
         }
         return usuarios;
     }
+
+    public static List<Usuario> buscarUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
+            Query<Usuario> query = session.createQuery("FROM Usuario", Usuario.class);
+            usuarios = query.list();
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar usuários por nome: " + e.getMessage());
+        }
+        return usuarios;
+    }
 }

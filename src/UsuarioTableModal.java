@@ -2,38 +2,50 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class UsuarioTableModal extends JTable {
 
-    public UsuarioTableModal(DefaultTableModel model) {
-        super(model);
-        initialize();
-    }
+    private UsuarioSelectionListener usuarioSelectionListener;
 
-    private void initialize() {
-
+    public UsuarioTableModal(DefaultTableModel model, UsuarioSelectionListener usuarioSelectionListener) {
+        this.usuarioSelectionListener = usuarioSelectionListener;
         String[] columnNames = {"ID", "Nome", "Cargo"};
 
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Todas as células são inalteráveis
+                return false;
+            }
+        };
 
-        setModel(tableModel);
+        // Buscar usuários
+        List<Usuario> usuarios = UsuarioDAO.buscarUsuarios();
+
+        // Adicionar usuários ao modelo da tabela
+        for (Usuario usuario : usuarios) {
+            Object[] row = new Object[3];
+            row[0] = usuario.getId();
+            row[1] = usuario.getNome();
+            row[2] = usuario.getCargo();
+            model.addRow(row);
+        }
+
+        setModel(model);
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int row = rowAtPoint(e.getPoint());
-                    // Faça algo com a linha que foi clicada duplamente, por exemplo:
-                    System.out.println("Linha " + row + " clicada duplamente.");
-                    // Você pode acessar os dados da linha usando o modelo da tabela
-                    // Por exemplo, para obter o ID da linha clicada:
-                    // int id = (int) getValueAt(row, 0);
+                    Usuario usuario = usuarios.get(row);
+                    usuarioSelectionListener.onUsuarioSelected(usuario);
+                    setVisible(false);
                 }
             }
         });
 
         // Adicione código adicional aqui para configurar a tabela conforme necessário
     }
-
-    // Métodos adicionais podem ser adicionados para manipular os dados da tabela conforme necessário
 }

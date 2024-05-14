@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ManipularUsuarioModal extends JDialog {
+public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionListener{
 
     private UsuarioController usuarioController;
     private UsuarioDAO usuarioDAO;
@@ -20,11 +20,12 @@ public class ManipularUsuarioModal extends JDialog {
     private JButton btnCreate;
     private JButton btnDelete;
     private JButton btnUpdate;
-    private JButton btnTabela; // Novo botão para tabela
+    private JButton btnTabela;
 
     public ManipularUsuarioModal(JFrame parent) {
         super(parent, true);
-        setSize(400, 300);
+        setSize(400, 250);
+        setTitle("Usuarios");
 
         usuarioController = new UsuarioController(this, usuarioDAO);
 
@@ -43,7 +44,6 @@ public class ManipularUsuarioModal extends JDialog {
         btnTabela = new JButton("Tabela"); // Inicializa o novo botão
 
         JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         panel.add(labelNome);
         panel.add(dfsNome);
@@ -57,7 +57,7 @@ public class ManipularUsuarioModal extends JDialog {
         panel.add(btnTabela); // Adiciona o botão à interface
 
         setLayout(new BorderLayout());
-        add(panel, BorderLayout.CENTER);
+        add(panel, BorderLayout.PAGE_END);
 
         setLocationRelativeTo(parent);
 
@@ -110,7 +110,7 @@ public class ManipularUsuarioModal extends JDialog {
     private void exibirTabela() {
         // Crie uma instância da classe UsuarioTableModal
         DefaultTableModel tableModel = new DefaultTableModel();
-        UsuarioTableModal tabela = new UsuarioTableModal(tableModel);
+        UsuarioTableModal tabela = new UsuarioTableModal(tableModel, this);
 
         // Crie um JDialog para exibir a tabela
         JDialog tabelaDialog = new JDialog(this, "Tabela de Usuários", true);
@@ -119,6 +119,13 @@ public class ManipularUsuarioModal extends JDialog {
         tabelaDialog.setSize(600, 400);
         tabelaDialog.setLocationRelativeTo(this);
         tabelaDialog.setVisible(true);
+    }
+
+    @Override
+    public void onUsuarioSelected(Usuario usuario) {
+        dfsNome.setText(usuario.getNome());
+        dfsSenha.setText(usuario.getSenha());
+        cbxCargo.setSelectedItem(usuario.getCargo());
     }
 
     public void limpaCampos(){
