@@ -17,8 +17,9 @@ public class MainView extends JFrame {
     private JButton btnExcluirLivro;
     private JButton btnEditLivro;
     private JButton btnEmprestarLivro;
-
     private JButton btnBuscar;
+    private JButton btnUsuario;
+
     private JLabel tituloLabel;
     private JTextField dfsTitulo;
     private JLabel generoLabel;
@@ -27,6 +28,7 @@ public class MainView extends JFrame {
     private JTextField dfsISBN;
     private JLabel autorLabel;
     private JTextField dfsAutor;
+
     public MainView(String nomeUsuario) {
         setTitle("Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,6 +49,10 @@ public class MainView extends JFrame {
 
         btnEmprestarLivro = new JButton("Emprestar Livro");
         btnEmprestarLivro.setBackground(new Color(171, 48, 255));
+
+        JButton btnUsuario = new JButton("Usuário");
+        btnUsuario.setBackground(new Color(255, 165, 0));
+
 
         tituloLabel = new JLabel("Titulo:");
         dfsTitulo = new JTextField();
@@ -91,6 +97,7 @@ public class MainView extends JFrame {
         panelButtons.add(btnEditLivro);
         panelButtons.add(btnExcluirLivro);
         panelButtons.add(btnEmprestarLivro);
+        panelButtons.add(btnUsuario);
         add(panelButtons, BorderLayout.PAGE_END);
         setLocationRelativeTo(null);
 
@@ -153,6 +160,14 @@ public class MainView extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para excluir.");
                 }
+            }
+        });
+
+        btnUsuario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ManipularUsuarioModal usuarioModal = new ManipularUsuarioModal(MainView.this);
+                usuarioModal.setVisible(true);
             }
         });
 

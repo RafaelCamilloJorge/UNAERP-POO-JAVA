@@ -34,6 +34,7 @@ public class ManipularLivroModal extends JDialog {
 
         livroController = new LivroController(this, livroDAO);
 
+
         labelTituloLivro = new JLabel("Título:");
         labelAutorLivro = new JLabel("Autor:");
         labelCategoriaLivro = new JLabel("Categoria:");

@@ -43,7 +43,6 @@ public class Livro {
     public void setID(int id){
         this.id = id;
     }
-    // Getters e Setters
     public String getTitulo() {
         return titulo;
     }

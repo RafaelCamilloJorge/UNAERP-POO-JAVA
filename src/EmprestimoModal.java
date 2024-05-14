@@ -14,6 +14,7 @@ public class EmprestimoModal extends JDialog {
     private JFormattedTextField dfdEmprestimo;
     private JFormattedTextField dfdDevolucao;
     private MaskFormatter dateFormatter;
+    private JButton btnEmprestimo;
 
 
     public EmprestimoModal() {
@@ -45,6 +46,8 @@ public class EmprestimoModal extends JDialog {
         dataDevolucaoLabel = new JLabel("Data de Devolução:");
         dfdDevolucao = new JFormattedTextField(dateFormatter);
 
+        btnEmprestimo = new JButton("Emprestar");
+
         panel.add(usuarioLabel);
         panel.add(dfsUsuario);
         panel.add(livroLabel);
@@ -53,6 +56,7 @@ public class EmprestimoModal extends JDialog {
         panel.add(dfdEmprestimo);
         panel.add(dataDevolucaoLabel);
         panel.add(dfdDevolucao);
+        panel.add(btnEmprestimo);
 
         setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
