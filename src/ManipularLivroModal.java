@@ -123,9 +123,6 @@ public class ManipularLivroModal extends JDialog {
 
     }
 
-
-
-
     private void editarLivro(int id) {
         String titulo = dfsTituloLivro.getText();
         String autor = dfsAutorLivro.getText();

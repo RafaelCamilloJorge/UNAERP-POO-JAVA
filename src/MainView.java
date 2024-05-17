@@ -29,7 +29,7 @@ public class MainView extends JFrame {
     private JLabel autorLabel;
     private JTextField dfsAutor;
 
-    public MainView(String nomeUsuario) {
+    public MainView(String nomeUsuario, String cargoUsuario) {
         setTitle("Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -50,7 +50,7 @@ public class MainView extends JFrame {
         btnEmprestarLivro = new JButton("Emprestar Livro");
         btnEmprestarLivro.setBackground(new Color(171, 48, 255));
 
-        JButton btnUsuario = new JButton("Usuário");
+        btnUsuario = new JButton("Usuário");
         btnUsuario.setBackground(new Color(255, 165, 0));
 
 
@@ -93,11 +93,14 @@ public class MainView extends JFrame {
         panelTabela.add(new JScrollPane(tableLivros));
         add(panelTabela, BorderLayout.CENTER);
         panelButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelButtons.add(btnCadastrarLivro);
-        panelButtons.add(btnEditLivro);
-        panelButtons.add(btnExcluirLivro);
+
+        if(cargoUsuario.equals("Administrador")){
+            panelButtons.add(btnCadastrarLivro);
+            panelButtons.add(btnEditLivro);
+            panelButtons.add(btnExcluirLivro);
+            panelButtons.add(btnUsuario);
+        }
         panelButtons.add(btnEmprestarLivro);
-        panelButtons.add(btnUsuario);
         add(panelButtons, BorderLayout.PAGE_END);
         setLocationRelativeTo(null);
 
@@ -171,6 +174,13 @@ public class MainView extends JFrame {
             }
         });
 
+        btnEmprestarLivro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
+
         dfsTitulo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -186,14 +196,14 @@ public class MainView extends JFrame {
         if((!nomeLivro.contains("buscar...") && !nomeLivro.isBlank()) || !autor.isBlank() || !genero.isBlank() || !ISBN.isBlank()) {
             livros = LivroDAO.buscarLivros(nomeLivro, autor, genero, ISBN);
         }
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID");
-        model.addColumn("Título");
-        model.addColumn("Autor");
-        model.addColumn("Categoria");
-        model.addColumn("ISBN");
-        model.addColumn("Status");
-        model.addColumn("Prazo Emprestimo");
+
+        String[] columnNames = { "ID", "Título", "Autor", "Categoria", "ISBN", "Status", "Prazo Emprestimo" };
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         for (Livro livro : livros) {
             Object[] rowData = { livro.getID(), livro.getTitulo(), livro.getAutor(), livro.getCategoria(),
@@ -203,13 +213,4 @@ public class MainView extends JFrame {
 
         tableLivros.setModel(model);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainView mainView = new MainView("Usuário");
-            mainView.setVisible(true);
-        });
-    }
-
-    
 }

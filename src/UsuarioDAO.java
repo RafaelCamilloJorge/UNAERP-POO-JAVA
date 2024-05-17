@@ -63,16 +63,17 @@ public class UsuarioDAO {
         }
     }
 
-    public static List<Usuario> buscarUsuariosPorNome(String nomeUsuario) {
-        List<Usuario> usuarios = new ArrayList<>();
+    public static Usuario buscarUsuario(String nomeUsuario, String senha) {
+        Usuario usuario = null;
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Usuario> query = session.createQuery("FROM Usuario WHERE lower(nome) LIKE :nomeUsuario", Usuario.class);
-            query.setParameter("nomeUsuario", "%" + nomeUsuario.toLowerCase() + "%");
-            usuarios = query.list();
+            Query<Usuario> query = session.createQuery("FROM Usuario WHERE lower(nome) = :nomeUsuario AND lower(senha) = :senha ", Usuario.class);
+            query.setParameter("nomeUsuario", nomeUsuario.toLowerCase());
+            query.setParameter("senha", senha.toLowerCase());
+            usuario = query.uniqueResult();
         } catch (Exception e) {
             System.out.println("Erro ao buscar usuários por nome: " + e.getMessage());
         }
-        return usuarios;
+        return usuario;
     }
 
     public static List<Usuario> buscarUsuarios() {

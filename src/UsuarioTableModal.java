@@ -1,29 +1,30 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class UsuarioTableModal extends JTable {
+public class UsuarioTableModal extends JDialog {
 
     private UsuarioSelectionListener usuarioSelectionListener;
+    private JTable table;
 
-    public UsuarioTableModal(DefaultTableModel model, UsuarioSelectionListener usuarioSelectionListener) {
+    public UsuarioTableModal(JDialog owner, boolean modal, UsuarioSelectionListener usuarioSelectionListener) {
+        super(owner, modal);
         this.usuarioSelectionListener = usuarioSelectionListener;
+
         String[] columnNames = {"ID", "Nome", "Cargo"};
 
-        model = new DefaultTableModel(columnNames, 0) {
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Todas as células são inalteráveis
                 return false;
             }
         };
 
-        // Buscar usuários
         List<Usuario> usuarios = UsuarioDAO.buscarUsuarios();
 
-        // Adicionar usuários ao modelo da tabela
         for (Usuario usuario : usuarios) {
             Object[] row = new Object[3];
             row[0] = usuario.getId();
@@ -32,20 +33,22 @@ public class UsuarioTableModal extends JTable {
             model.addRow(row);
         }
 
-        setModel(model);
+        table = new JTable(model);
 
-        addMouseListener(new MouseAdapter() {
+        table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int row = rowAtPoint(e.getPoint());
+                    int row = table.rowAtPoint(e.getPoint());
                     Usuario usuario = usuarios.get(row);
                     usuarioSelectionListener.onUsuarioSelected(usuario);
-                    setVisible(false);
+                    dispose();
                 }
             }
         });
 
-        // Adicione código adicional aqui para configurar a tabela conforme necessário
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+        pack();
     }
 }

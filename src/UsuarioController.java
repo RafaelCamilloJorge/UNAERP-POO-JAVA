@@ -16,6 +16,7 @@ public class UsuarioController {
 
         usuarioDAO.cadastrarUsuario(usuario);
         JOptionPane.showMessageDialog(manipularUsuarioModal, "Usuário cadastrado com sucesso!");
+        manipularUsuarioModal.limpaCampos();
     }
 
     public void editarUsuario(Usuario usuario){
@@ -25,11 +26,13 @@ public class UsuarioController {
 
         usuarioDAO.editarUsuario(usuario);
         JOptionPane.showMessageDialog(manipularUsuarioModal, "Usuário editado com sucesso!");
+        manipularUsuarioModal.limpaCampos();
     }
 
     public void excluirUsuario(int id){
         usuarioDAO.removerUsuario(id);
         JOptionPane.showMessageDialog(manipularUsuarioModal, "Usuário excluído com sucesso!");
+        manipularUsuarioModal.limpaCampos();
     }
 
     private boolean validaUsuario(Usuario usuario) {

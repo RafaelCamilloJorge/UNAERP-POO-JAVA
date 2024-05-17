@@ -21,6 +21,7 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
     private JButton btnDelete;
     private JButton btnUpdate;
     private JButton btnTabela;
+    private int idUser;
 
     public ManipularUsuarioModal(JFrame parent) {
         super(parent, true);
@@ -35,13 +36,13 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
 
         dfsNome = new JTextField();
         dfsSenha = new JPasswordField();
-        String[] cargos = {"Administrador", "Funcionário", "Usuário Padrão"};
+        String[] cargos = {"Administrador", "Funcionário"};
         cbxCargo = new JComboBox<>(cargos);
 
         btnCreate = new JButton("Cadastrar");
         btnDelete = new JButton("Excluir");
         btnUpdate = new JButton("Atualizar");
-        btnTabela = new JButton("Tabela"); // Inicializa o novo botão
+        btnTabela = new JButton("Tabela");
 
         JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
 
@@ -54,7 +55,11 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
         panel.add(btnCreate);
         panel.add(btnDelete);
         panel.add(btnUpdate);
-        panel.add(btnTabela); // Adiciona o botão à interface
+        panel.add(btnTabela);
+
+        btnDelete.setEnabled(false);
+        btnUpdate.setEnabled(false);
+
 
         setLayout(new BorderLayout());
         add(panel, BorderLayout.PAGE_END);
@@ -65,15 +70,21 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
             @Override
             public void actionPerformed(ActionEvent e) {
                 cadastrarUsuario();
+                limpaCampos();
+            }
+        });
+
+        btnUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editarUsuario(idUser);
             }
         });
 
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                Usuario usuario = new Usuario();
-                excluirUsuario(usuario.getId());
+                excluirUsuario(idUser);
             }
         });
 
@@ -108,29 +119,27 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
     }
 
     private void exibirTabela() {
-        // Crie uma instância da classe UsuarioTableModal
-        DefaultTableModel tableModel = new DefaultTableModel();
-        UsuarioTableModal tabela = new UsuarioTableModal(tableModel, this);
-
-        // Crie um JDialog para exibir a tabela
-        JDialog tabelaDialog = new JDialog(this, "Tabela de Usuários", true);
-        tabelaDialog.setLayout(new BorderLayout());
-        tabelaDialog.add(new JScrollPane(tabela), BorderLayout.CENTER);
-        tabelaDialog.setSize(600, 400);
-        tabelaDialog.setLocationRelativeTo(this);
+        UsuarioTableModal tabelaDialog = new UsuarioTableModal(this, true, this);
         tabelaDialog.setVisible(true);
     }
 
     @Override
     public void onUsuarioSelected(Usuario usuario) {
+        idUser = usuario.getId();
         dfsNome.setText(usuario.getNome());
         dfsSenha.setText(usuario.getSenha());
         cbxCargo.setSelectedItem(usuario.getCargo());
+
+        btnDelete.setEnabled(true);
+        btnUpdate.setEnabled(true);
     }
 
     public void limpaCampos(){
         dfsNome.setText("");
         dfsSenha.setText("");
         cbxCargo.setSelectedIndex(-1);
+
+        btnUpdate.setEnabled(false);
+        btnDelete.setEnabled(false);
     }
 }

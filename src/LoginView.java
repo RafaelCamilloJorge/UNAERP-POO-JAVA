@@ -7,12 +7,16 @@ public class LoginView extends JFrame {
     private JTextField dfsNome;
     private JPasswordField dfsSenha;
     private JButton btnLogin;
+    private LoginController loginController;
+    private UsuarioDAO UsuarioDAO;
 
     public LoginView() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 150);
         setLayout(new GridBagLayout());
+
+        loginController = new LoginController(this, UsuarioDAO);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -49,11 +53,13 @@ public class LoginView extends JFrame {
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String usuario = dfsNome.getText();
+                String nome = dfsNome.getText();
                 String senha = new String(dfsSenha.getPassword());
 
-                if (usuario.equals("Rafael") && senha.equals("1")) {
-                    openMainView(usuario);
+                Usuario usuario = loginController.autenticarUsuario(nome, senha);
+
+                if (usuario != null) {
+                    openMainView(usuario.getNome(), usuario.getCargo());
                     dispose();
                 } else {
                     JOptionPane.showMessageDialog(LoginView.this, "Usuário ou senha inválidos.");
@@ -62,8 +68,8 @@ public class LoginView extends JFrame {
         });
     }
 
-    private void openMainView(String nomeUsuario) {
-        MainView telaPrincipal = new MainView(nomeUsuario);
+    private void openMainView(String nomeUsuario, String cargo) {
+        MainView telaPrincipal = new MainView(nomeUsuario, cargo);
         telaPrincipal.setVisible(true);
     }
 }
