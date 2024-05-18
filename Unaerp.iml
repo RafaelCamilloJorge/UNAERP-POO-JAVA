@@ -6,7 +6,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="Unaerp" value="5e9ae314-00c9-467e-b195-1207c813b61e" />
+          <factory-entry name="Unaerp" value="60b47419-fa0f-4a27-8add-c6fb52288dc9" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

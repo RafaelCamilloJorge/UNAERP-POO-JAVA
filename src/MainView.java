@@ -177,7 +177,10 @@ public class MainView extends JFrame {
         btnEmprestarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                int idLivro = (int) tableLivros.getValueAt(tableLivros.getSelectedRow(), 0);
+                EmprestimoModal emprestimoModal = new EmprestimoModal(MainView.this, true, idLivro);
+                emprestimoModal.setLocationRelativeTo(null);
+                emprestimoModal.setVisible(true);
             }
         });
 
