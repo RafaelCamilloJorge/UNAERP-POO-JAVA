@@ -20,6 +20,7 @@ public class Conexao {
             sessionFactory = new MetadataSources(registry)
                     .addAnnotatedClass(Livro.class)
                     .addAnnotatedClass(Usuario.class)
+                    .addAnnotatedClass(Cliente.class)
                     .buildMetadata()
                     .buildSessionFactory();
 

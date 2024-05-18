@@ -3,16 +3,17 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class EmprestimoModal extends JDialog {
+public class EmprestimoModal extends JDialog implements ClienteSelectionListener {
     private JLabel lblLivro;
     private JLabel lblCliente;
     private JLabel lblDataEmprestimo;
 
-    private int idLivro;
+    private Livro livro;
+    private int idCliente;
 
     private JTextField dfsLivro;
     private JTextField dfsCliente;
@@ -22,9 +23,11 @@ public class EmprestimoModal extends JDialog {
 
     private JButton btnEmprestar;
 
-    public EmprestimoModal(JFrame owner, boolean modal, int idLivro){
+    private ClienteDAO clienteDAO;
+
+    public EmprestimoModal(JFrame owner, boolean modal, Livro livro){
         super(owner, modal);
-        this.idLivro = idLivro;
+        this.livro = livro;
         setTitle("Emprestimo");
         setSize(500, 250);
         setLayout(new GridBagLayout());
@@ -37,7 +40,8 @@ public class EmprestimoModal extends JDialog {
         lblCliente = new JLabel("Cliente:");
         dfsCliente = new JTextField();
         dfsCliente.setPreferredSize(new Dimension(200, 30));
-        btnBuscarCliente = new JButton("");
+        ImageIcon lupaIcon = new ImageIcon("src/img/lupa (1).png");
+        btnBuscarCliente = new JButton(lupaIcon);
         btnBuscarCliente.setPreferredSize(new Dimension(30, 30));
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -49,6 +53,7 @@ public class EmprestimoModal extends JDialog {
 
         lblLivro = new JLabel("Livro:");
         dfsLivro = new JTextField();
+        dfsLivro.setText(livro.getTitulo());
         dfsLivro.setPreferredSize(new Dimension(200, 30));
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -58,12 +63,21 @@ public class EmprestimoModal extends JDialog {
         add(dfsLivro, constraints);
 
         lblDataEmprestimo = new JLabel("Devolução:");
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        MaskFormatter mask;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        int prazoEmprestimo = livro.getPrazoEmprestimo();
+
+        LocalDate dataAtual = LocalDate.now();
+
+        LocalDate dataFinal = dataAtual.plusDays(prazoEmprestimo);
+
+        String dataFormatada = dataFinal.format(formatter);
+
         try {
-            mask = new MaskFormatter("##/##/####");
+            MaskFormatter mask = new MaskFormatter("##/##/####");
             dfsDataEmprestimo = new JFormattedTextField(mask);
             dfsDataEmprestimo.setPreferredSize(new Dimension(200, 30));
+            dfsDataEmprestimo.setText(dataFormatada);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -81,16 +95,29 @@ public class EmprestimoModal extends JDialog {
         constraints.gridwidth = 3;
         add(btnEmprestar, constraints);
 
+        dfsLivro.setEditable(false);
+        dfsCliente.setEditable(false);
+        dfsDataEmprestimo.setEditable(false);
 
+        btnBuscarCliente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClienteTableModal clienteTableModal = new ClienteTableModal(null, true, clienteDAO, EmprestimoModal.this);
+                clienteTableModal.setLocationRelativeTo(null);
+                clienteTableModal.setVisible(true);
+            }
+        });
 
         btnEmprestar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cliente = dfsCliente.getText();
-                String livro = dfsLivro.getText();
-                String dataEmprestimo = dfsDataEmprestimo.getText();
+
             }
         });
     }
-    
+    @Override
+    public void onClienteSelected(Cliente cliente) {
+        idCliente = cliente.getId();
+        dfsCliente.setText(cliente.getNome());
+    }
 }

@@ -7,22 +7,28 @@ public class Emprestimo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int idEmprestimo;
-    private int idCliente;
-    private int idLivro;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cliente", nullable = false)
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "id_livro", nullable = false)
+    private Livro livro;
+
     private String dataEmprestimo;
     private String dataDevolucao;
 
-    public Emprestimo() {
-    }
+    public Emprestimo() {}
 
-    public Emprestimo(int idCliente, int idLivro, String dataEmprestimo, String dataDevolucao) {
-        this.idCliente = idCliente;
-        this.idLivro = idLivro;
+    public Emprestimo(Cliente cliente, Livro livro, String dataEmprestimo, String dataDevolucao) {
+        this.cliente = cliente;
+        this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
     }
 
+    // getters and setters
     public int getId() {
         return id;
     }
@@ -39,12 +45,12 @@ public class Emprestimo {
         this.cliente = cliente;
     }
 
-    public int getIdLivro() {
-        return idLivro;
+    public Livro getLivro() {
+        return livro;
     }
 
-    public void setIdLivro(int idLivro) {
-        this.idLivro = idLivro;
+    public void setLivro(Livro livro) {
+        this.livro = livro;
     }
 
     public String getDataEmprestimo() {

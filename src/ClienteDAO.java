@@ -8,7 +8,7 @@ public class ClienteDAO {
     public static void adicionarCliente(Cliente cliente) {
         Session session = Conexao.getDatabaseSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(cliente);
+        session.persist(cliente);
         transaction.commit();
         session.close();
     }
@@ -16,7 +16,7 @@ public class ClienteDAO {
     public static void editarCliente(Cliente cliente) {
         Session session = Conexao.getDatabaseSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.update(cliente);
+        session.persist(cliente);
         transaction.commit();
         session.close();
     }
@@ -24,7 +24,7 @@ public class ClienteDAO {
     public static void deletarCliente(Cliente cliente) {
         Session session = Conexao.getDatabaseSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.delete(cliente);
+        session.remove(cliente);
         transaction.commit();
         session.close();
     }
@@ -41,6 +41,15 @@ public class ClienteDAO {
         Cliente cliente = session.get(Cliente.class, id);
         session.close();
         return cliente;
+    }
+    public static List<Cliente> getClientePorNome(String nomeCliente) {
+        List<Cliente> clientes = null;
+        Session session = Conexao.getDatabaseSessionFactory().openSession();
+        Query<Cliente> query = session.createQuery("FROM Cliente WHERE lower(nome) LIKE :nome", Cliente.class);
+        query.setParameter("nome", "%" + nomeCliente.toLowerCase() + "%");
+        clientes = query.list();
+        session.close();
+        return clientes;
     }
 
     public static boolean isCPFUtilizado(String cpf) {

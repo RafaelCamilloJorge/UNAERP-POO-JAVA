@@ -177,8 +177,16 @@ public class MainView extends JFrame {
         btnEmprestarLivro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int idLivro = (int) tableLivros.getValueAt(tableLivros.getSelectedRow(), 0);
-                EmprestimoModal emprestimoModal = new EmprestimoModal(MainView.this, true, idLivro);
+                Livro livro = null;
+                int row = tableLivros.getSelectedRow();
+                if (row >= 0) {
+                    DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
+                    int id = (int) model.getValueAt(row, 0);
+                    livro = LivroDAO.getLivroPorID(id);
+                } else {
+                    JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione um livro para emprestar.");
+                }
+                EmprestimoModal emprestimoModal = new EmprestimoModal(MainView.this, true, livro);
                 emprestimoModal.setLocationRelativeTo(null);
                 emprestimoModal.setVisible(true);
             }
