@@ -31,6 +31,8 @@ public class ClienteController {
         }
 
         clienteDAO.adicionarCliente(cliente);
+        JOptionPane.showMessageDialog(manipularClienteModal, "Cliente criado com sucesso");
+        manipularClienteModal.dispose();
     }
 
     public boolean isCPFValid(String cpf) {

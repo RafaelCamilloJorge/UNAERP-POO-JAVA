@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,28 +20,33 @@ public class ManipularClienteModal extends JDialog {
 
         setTitle("Criar Cliente");
         setSize(300, 200);
-        setLayout(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        Border border = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+        panel.setBorder(border);
 
-        add(new JLabel("Nome:"));
+        panel.add(new JLabel("Nome Completo:"));
         txtNome = new JTextField(20);
-        add(txtNome);
+        panel.add(txtNome);
 
-        add(new JLabel("CPF:"));
+        panel.add(new JLabel("CPF:"));
         txtCpf = new JTextField(20);
-        add(txtCpf);
+        panel.add(txtCpf);
 
-        add(new JLabel("Telefone:"));
+        panel.add(new JLabel("Telefone:"));
         txtTelefone = new JTextField(20);
-        add(txtTelefone);
+        panel.add(txtTelefone);
 
         btnCriar = new JButton("Criar");
+        panel.add(btnCriar);
         btnCriar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 criarCliente();
             }
         });
-        add(btnCriar);
+
+
+        add(panel);
     }
 
     private void criarCliente() {

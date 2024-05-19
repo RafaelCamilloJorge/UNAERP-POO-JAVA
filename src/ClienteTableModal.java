@@ -27,7 +27,7 @@ public class ClienteTableModal extends JDialog {
         setLayout(new GridLayout(2, 4));
 
         JPanel pnlBuscar = new JPanel();
-        labelNome = new JLabel("Nome:");
+        labelNome = new JLabel("Nome Completo:");
         dfsNome = new JTextField(20);
         btnBuscar = new JButton("Buscar");
         btnCadastrarCliente = new JButton("Cadastrar Cliente");
@@ -52,6 +52,7 @@ public class ClienteTableModal extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ManipularClienteModal modal = new ManipularClienteModal(null, true);
+                modal.setLocationRelativeTo(null);
                 modal.setVisible(true);
                 buscarClientes();
             }
@@ -80,7 +81,7 @@ public class ClienteTableModal extends JDialog {
         }
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
-        model.addColumn("Nome");
+        model.addColumn("Nome Completo");
         model.addColumn("CPF");
         for (Cliente cliente : clientes) {
             model.addRow(new Object[]{cliente.getId(), cliente.getNome(), cliente.getCpf()});
