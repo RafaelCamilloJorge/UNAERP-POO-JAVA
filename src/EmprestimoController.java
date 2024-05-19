@@ -14,14 +14,18 @@ public class EmprestimoController {
         this.livroDAO = livroDAO;
     }
 
-    public void emprestar(int idCliente, int idLivro, LocalDate dataEmprestimo, LocalDate dataDevolucao) {
+    public void emprestar(int idCliente, int idLivro, String dataEmprestimo, String dataDevolucao) {
         Cliente cliente = clienteDAO.getClientePorID(idCliente);
         Livro livro = livroDAO.getLivroPorID(idLivro);
+        if(!livro.isDisponivel()){
+            JOptionPane.showMessageDialog(emprestimoModal, "Livro indisponível para emprestimo.");
+            return;
+        }
         if (cliente != null && livro != null) {
-            java.sql.Date sqlDataEmprestimo = java.sql.Date.valueOf(dataEmprestimo);
-            java.sql.Date sqlDataDevolucao = java.sql.Date.valueOf(dataDevolucao);
-            Emprestimo emprestimo = new Emprestimo(cliente, livro, sqlDataEmprestimo, sqlDataDevolucao);
+            Emprestimo emprestimo = new Emprestimo(cliente, livro, dataEmprestimo, dataDevolucao);
             EmprestimoDAO.adicionarEmprestimo(emprestimo);
+            livro.setDisponivel(false);
+            LivroDAO.editarLivro(livro);
             JOptionPane.showMessageDialog(emprestimoModal, "Empréstimo realizado com sucesso.");
             emprestimoModal.dispose();
         } else {

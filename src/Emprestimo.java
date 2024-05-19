@@ -20,14 +20,14 @@ public class Emprestimo implements Serializable {
     private Livro livro;
 
     @Column(name = "data_emprestimo", nullable = false)
-    private Date dataEmprestimo;
+    private String dataEmprestimo;
 
     @Column(name = "data_devolucao", nullable = true)
-    private Date dataDevolucao;
+    private String dataDevolucao;
 
     public Emprestimo() {}
 
-    public Emprestimo(Cliente cliente, Livro livro, Date dataEmprestimo, Date dataDevolucao) {
+    public Emprestimo(Cliente cliente, Livro livro, String dataEmprestimo, String dataDevolucao) {
         this.cliente = cliente;
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
@@ -58,19 +58,19 @@ public class Emprestimo implements Serializable {
         this.livro = livro;
     }
 
-    public Date getDataEmprestimo() {
+    public String getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(Date dataEmprestimo) {
+    public void setDataEmprestimo(String dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public Date getDataDevolucao() {
+    public String getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public void setDataDevolucao(Date dataDevolucao) {
+    public void setDataDevolucao(String dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
 }

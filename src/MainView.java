@@ -11,7 +11,7 @@ public class MainView extends JFrame {
     private JPanel navPanel;
     private JPanel panelTabela;
     private JPanel panelButtons;
-    private JTable tableLivros;
+    private static JTable tableLivros;
 
     private JButton btnCadastrarLivro;
     private JButton btnExcluirLivro;
@@ -208,7 +208,7 @@ public class MainView extends JFrame {
         });
     }
 
-    private void carregarLivros(String nomeLivro, String autor, String genero, String ISBN) {
+    public static void carregarLivros(String nomeLivro, String autor, String genero, String ISBN) {
         List<Livro> livros = LivroDAO.getLivros();
 
         if((!nomeLivro.contains("buscar...") && !nomeLivro.isBlank()) || !autor.isBlank() || !genero.isBlank() || !ISBN.isBlank()) {

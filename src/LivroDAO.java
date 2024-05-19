@@ -127,6 +127,20 @@ public class LivroDAO {
         }
     }
 
+    public static boolean isDisponivel(int id) {
+        try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM Livro WHERE id = :id", Long.class);
+            query.setParameter("id", id);
+            Long count = query.uniqueResult();
+            return count != null && count > 0;
+        } catch (Exception e) {
+            System.out.println("Erro ao verificar se o livro é disponivel: " + e.getMessage());
+            return false;
+        }
+    }
+
+
+
     public static void editarLivro(Livro livro) {
         Transaction transaction = null;
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {

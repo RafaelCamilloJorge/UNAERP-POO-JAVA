@@ -113,14 +113,10 @@ public class EmprestimoModal extends JDialog implements ClienteSelectionListener
         btnEmprestar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String dataEmprestimo = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
-                LocalDate dataEmprestimoDate = LocalDate.parse(dataEmprestimo, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
-                LocalDate dataDevolucao = LocalDate.parse("19-05-2024", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
-                emprestimoController.emprestar(idCliente, livro.getID(), dataEmprestimoDate, dataDevolucao);
-
+                String dataEmprestimo = dataAtual.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                String dataDevolucao = dataFinal.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                emprestimoController.emprestar(idCliente, livro.getID(), dataEmprestimo, dataDevolucao);
+                MainView.carregarLivros("", "", "", "");
             }
         });
     }
