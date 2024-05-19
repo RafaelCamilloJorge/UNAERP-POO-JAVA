@@ -183,14 +183,21 @@ public class MainView extends JFrame {
                     DefaultTableModel model = (DefaultTableModel) tableLivros.getModel();
                     int id = (int) model.getValueAt(row, 0);
                     livro = LivroDAO.getLivroPorID(id);
+                    if (livro != null) {
+                        ClienteDAO clienteDAO = new ClienteDAO();
+                        LivroDAO livroDAO = new LivroDAO();
+                        EmprestimoModal emprestimoModal = new EmprestimoModal(MainView.this, true, livro, clienteDAO, livroDAO);
+                        emprestimoModal.setLocationRelativeTo(null);
+                        emprestimoModal.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(MainView.this, "O livro selecionado não foi encontrado no banco de dados.");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione um livro para emprestar.");
                 }
-                EmprestimoModal emprestimoModal = new EmprestimoModal(MainView.this, true, livro);
-                emprestimoModal.setLocationRelativeTo(null);
-                emprestimoModal.setVisible(true);
             }
         });
+
 
         dfsTitulo.addActionListener(new ActionListener() {
             @Override

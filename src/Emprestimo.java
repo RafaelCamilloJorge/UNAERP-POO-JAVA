@@ -1,8 +1,11 @@
 import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "emprestimos")
-public class Emprestimo {
+public class Emprestimo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,19 +19,21 @@ public class Emprestimo {
     @JoinColumn(name = "id_livro", nullable = false)
     private Livro livro;
 
-    private String dataEmprestimo;
-    private String dataDevolucao;
+    @Column(name = "data_emprestimo", nullable = false)
+    private Date dataEmprestimo;
+
+    @Column(name = "data_devolucao", nullable = true)
+    private Date dataDevolucao;
 
     public Emprestimo() {}
 
-    public Emprestimo(Cliente cliente, Livro livro, String dataEmprestimo, String dataDevolucao) {
+    public Emprestimo(Cliente cliente, Livro livro, Date dataEmprestimo, Date dataDevolucao) {
         this.cliente = cliente;
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
     }
 
-    // getters and setters
     public int getId() {
         return id;
     }
@@ -53,19 +58,19 @@ public class Emprestimo {
         this.livro = livro;
     }
 
-    public String getDataEmprestimo() {
+    public Date getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(String dataEmprestimo) {
+    public void setDataEmprestimo(Date dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public String getDataDevolucao() {
+    public Date getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public void setDataDevolucao(String dataDevolucao) {
+    public void setDataDevolucao(Date dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
 }

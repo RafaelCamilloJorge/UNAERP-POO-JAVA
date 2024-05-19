@@ -10,27 +10,31 @@ import java.time.format.DateTimeFormatter;
 public class EmprestimoModal extends JDialog implements ClienteSelectionListener {
     private JLabel lblLivro;
     private JLabel lblCliente;
-    private JLabel lblDataEmprestimo;
+    private JLabel lblDataDevolucao;
 
     private Livro livro;
     private int idCliente;
 
     private JTextField dfsLivro;
     private JTextField dfsCliente;
-    private JFormattedTextField dfsDataEmprestimo;
+    private JFormattedTextField dfsDataDevolucao;
 
     private JButton btnBuscarCliente;
-
     private JButton btnEmprestar;
 
     private ClienteDAO clienteDAO;
+    private LivroDAO livroDAO;
 
-    public EmprestimoModal(JFrame owner, boolean modal, Livro livro){
+    public EmprestimoModal(JFrame owner, boolean modal, Livro livro, ClienteDAO clienteDAO, LivroDAO livroDAO) {
         super(owner, modal);
         this.livro = livro;
-        setTitle("Emprestimo");
+        this.clienteDAO = clienteDAO;
+        this.livroDAO = livroDAO;
+        setTitle("Empréstimo");
         setSize(500, 250);
         setLayout(new GridBagLayout());
+
+        EmprestimoController emprestimoController = new EmprestimoController(this, clienteDAO, livroDAO);
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -62,32 +66,30 @@ public class EmprestimoModal extends JDialog implements ClienteSelectionListener
         constraints.gridwidth = 2;
         add(dfsLivro, constraints);
 
-        lblDataEmprestimo = new JLabel("Devolução:");
+
+        lblDataDevolucao = new JLabel("Devolução:");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         int prazoEmprestimo = livro.getPrazoEmprestimo();
-
         LocalDate dataAtual = LocalDate.now();
-
         LocalDate dataFinal = dataAtual.plusDays(prazoEmprestimo);
-
         String dataFormatada = dataFinal.format(formatter);
 
         try {
             MaskFormatter mask = new MaskFormatter("##/##/####");
-            dfsDataEmprestimo = new JFormattedTextField(mask);
-            dfsDataEmprestimo.setPreferredSize(new Dimension(200, 30));
-            dfsDataEmprestimo.setText(dataFormatada);
+            dfsDataDevolucao = new JFormattedTextField(mask);
+            dfsDataDevolucao.setPreferredSize(new Dimension(200, 30));
+            dfsDataDevolucao.setText(dataFormatada);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        add(lblDataEmprestimo, constraints);
+        add(lblDataDevolucao, constraints);
         constraints.gridx = 1;
         constraints.gridwidth = 2;
-        add(dfsDataEmprestimo, constraints);
+        add(dfsDataDevolucao, constraints);
 
         btnEmprestar = new JButton("Emprestar");
         constraints.gridx = 0;
@@ -97,7 +99,7 @@ public class EmprestimoModal extends JDialog implements ClienteSelectionListener
 
         dfsLivro.setEditable(false);
         dfsCliente.setEditable(false);
-        dfsDataEmprestimo.setEditable(false);
+        dfsDataDevolucao.setEditable(false);
 
         btnBuscarCliente.addActionListener(new ActionListener() {
             @Override
@@ -111,10 +113,18 @@ public class EmprestimoModal extends JDialog implements ClienteSelectionListener
         btnEmprestar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String dataEmprestimo = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+                LocalDate dataEmprestimoDate = LocalDate.parse(dataEmprestimo, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+                LocalDate dataDevolucao = LocalDate.parse("19-05-2024", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+                emprestimoController.emprestar(idCliente, livro.getID(), dataEmprestimoDate, dataDevolucao);
 
             }
         });
     }
+
     @Override
     public void onClienteSelected(Cliente cliente) {
         idCliente = cliente.getId();

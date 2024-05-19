@@ -21,6 +21,7 @@ public class Conexao {
                     .addAnnotatedClass(Livro.class)
                     .addAnnotatedClass(Usuario.class)
                     .addAnnotatedClass(Cliente.class)
+                    .addAnnotatedClass(Emprestimo.class)
                     .buildMetadata()
                     .buildSessionFactory();
 

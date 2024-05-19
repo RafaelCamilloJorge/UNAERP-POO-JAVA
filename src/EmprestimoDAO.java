@@ -10,7 +10,7 @@ public class EmprestimoDAO {
         Transaction transaction = null;
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.save(emprestimo);
+            session.persist(emprestimo);
             transaction.commit();
             System.out.println("Emprestimo adicionado com sucesso.");
         } catch (Exception e) {
