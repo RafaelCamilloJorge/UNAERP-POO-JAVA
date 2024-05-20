@@ -19,6 +19,7 @@ public class MainView extends JFrame {
     private JButton btnEmprestarLivro;
     private JButton btnBuscar;
     private JButton btnUsuario;
+    private JButton btnDevolverLivro;
 
     private JLabel tituloLabel;
     private JTextField dfsTitulo;
@@ -49,6 +50,9 @@ public class MainView extends JFrame {
 
         btnEmprestarLivro = new JButton("Emprestar Livro");
         btnEmprestarLivro.setBackground(new Color(171, 48, 255));
+
+        btnDevolverLivro = new JButton("Devolver Livro");
+        btnDevolverLivro.setBackground(new Color(171, 48, 255));
 
         btnUsuario = new JButton("Usuário");
         btnUsuario.setBackground(new Color(255, 165, 0));
@@ -101,6 +105,7 @@ public class MainView extends JFrame {
             panelButtons.add(btnUsuario);
         }
         panelButtons.add(btnEmprestarLivro);
+        panelButtons.add(btnDevolverLivro);
         add(panelButtons, BorderLayout.PAGE_END);
         setLocationRelativeTo(null);
 
@@ -194,6 +199,19 @@ public class MainView extends JFrame {
                     }
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione um livro para emprestar.");
+                }
+            }
+        });
+
+        btnDevolverLivro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int id = (int) tableLivros.getValueAt(tableLivros.getSelectedRow(), 0);
+                if(JOptionPane.showConfirmDialog(MainView.this, "Deseja devolver o livro selecionado?", "Confirmação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    Livro livro = LivroDAO.getLivroPorID(id);
+                    livro.setDisponivel(true);
+                    LivroDAO.editarLivro(livro);
+                    carregarLivros("", "", "", "");
                 }
             }
         });
