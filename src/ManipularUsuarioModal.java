@@ -120,6 +120,7 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
 
     private void exibirTabela() {
         UsuarioTableModal tabelaDialog = new UsuarioTableModal(this, true, this);
+        tabelaDialog.setLocationRelativeTo(null);
         tabelaDialog.setVisible(true);
     }
 

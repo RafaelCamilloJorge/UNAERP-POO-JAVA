@@ -57,9 +57,4 @@ public class ManipularClienteModal extends JDialog {
         Cliente cliente = new Cliente(nome, cpf, telefone);
         clienteController.criarCliente(cliente);
     }
-
-    public static void main(String[] args) {
-        ManipularClienteModal modal = new ManipularClienteModal(null, true);
-        modal.setVisible(true);
-    }
 }

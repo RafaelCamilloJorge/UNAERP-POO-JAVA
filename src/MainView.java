@@ -3,6 +3,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 
@@ -212,6 +214,20 @@ public class MainView extends JFrame {
                     livro.setDisponivel(true);
                     LivroDAO.editarLivro(livro);
                     carregarLivros("", "", "", "");
+                }
+            }
+        });
+
+        tableLivros.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table =(JTable) mouseEvent.getSource();
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    int selectedRow = table.getSelectedRow();
+                    int idLivro = (int) table.getModel().getValueAt(selectedRow, 0);
+                    Livro livro = LivroDAO.getLivroPorID(idLivro);
+                    HistoricoEmprestimoModal historicoModal = new HistoricoEmprestimoModal(MainView.this, true, livro);
+                    historicoModal.setLocationRelativeTo(null);
+                    historicoModal.setVisible(true);
                 }
             }
         });

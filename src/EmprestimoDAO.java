@@ -74,4 +74,16 @@ public class EmprestimoDAO {
             System.out.println("Erro ao remover emprestimo: " + e.getMessage());
         }
     }
+
+    public static List<Emprestimo> getEmprestimosPorLivro(Livro livro) {
+        List<Emprestimo> emprestimos = null;
+        try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
+            Query query = session.createQuery("FROM Emprestimo WHERE livro = :livro", Emprestimo.class);
+            query.setParameter("livro", livro);
+            emprestimos = query.getResultList();
+        } catch (Exception e) {
+            System.out.println("Erro ao obter emprestimos por livro: " + e.getMessage());
+        }
+        return emprestimos;
+    }
 }
