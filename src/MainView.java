@@ -211,8 +211,8 @@ public class MainView extends JFrame {
                 int id = (int) tableLivros.getValueAt(tableLivros.getSelectedRow(), 0);
                 if(JOptionPane.showConfirmDialog(MainView.this, "Deseja devolver o livro selecionado?", "Confirmação", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     Livro livro = LivroDAO.getLivroPorID(id);
-                    livro.setDisponivel(true);
-                    LivroDAO.editarLivro(livro);
+                    Emprestimo emprestimo = EmprestimoDAO.getUltimoEmprestimoPorLivro(livro);
+                    EmprestimoDAO.devolverEmprestimo(emprestimo, livro);
                     carregarLivros("", "", "", "");
                 }
             }
@@ -259,7 +259,7 @@ public class MainView extends JFrame {
 
         for (Livro livro : livros) {
             Object[] rowData = { livro.getID(), livro.getTitulo(), livro.getAutor(), livro.getCategoria(),
-                    livro.getIsbn(), livro.isDisponivel() ? "Disponivel" : "Indisponivel", livro.getPrazoEmprestimo() };
+                    livro.getIsbn(), livro.isDisponivel() ? "Disponivel" : "Indisponivel", livro.getPrazoEmprestimo()};
             model.addRow(rowData);
         }
 

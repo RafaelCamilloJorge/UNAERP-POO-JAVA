@@ -25,10 +25,18 @@ import javax.swing.*;
             try {
                 int prazoEmprestimoInt = Integer.parseInt(String.valueOf(livro.getPrazoEmprestimo()));
 
-                if (livroDAO.isISBNUtilizado(livro.getIsbn())) {
+                if (livroDAO.isISBNUtilizado(livro.getIsbn()) != null && livroDAO.isISBNUtilizado(livro.getIsbn()).isAtivo()) {
                     JOptionPane.showMessageDialog(manipularLivroModal, "Este ISBN já foi utilizado por outro livro.",
                             "Erro", JOptionPane.ERROR_MESSAGE);
                     return;
+                }else{
+                    Livro livroReativar = livroDAO.isISBNUtilizado(livro.getIsbn());
+                    if(livroReativar != null){
+                        livroReativar.setAtivo(true);
+                        livroDAO.editarLivro(livroReativar);
+                        JOptionPane.showMessageDialog(manipularLivroModal, "Livro: " + livroReativar.getTitulo() + " reativado com sucesso!");
+                        return;
+                    }
                 }
 
                 livroDAO.adicionarLivro(livro);
@@ -57,7 +65,7 @@ import javax.swing.*;
             }
 
             if (!livro.getIsbn().equals(LivroDAO.getLivroPorID(livro.getID()).getIsbn())) {
-                if (LivroDAO.isISBNUtilizado(livro.getIsbn())) {
+                if (LivroDAO.isISBNUtilizado(livro.getIsbn()) != null) {
                     JOptionPane.showMessageDialog(manipularLivroModal, "ISBN já foi utilizado por outro livro.",
                             "Erro", JOptionPane.ERROR_MESSAGE);
                     return;

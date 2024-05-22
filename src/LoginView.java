@@ -56,10 +56,12 @@ public class LoginView extends JFrame {
                 String nome = dfsNome.getText();
                 String senha = new String(dfsSenha.getPassword());
 
-                if(nome == "admin" && senha == "admin"){
-                    openMainView(nome, "admin");
+                if(nome.equals("admin") && senha.equals("admin")){
+                    dispose();
+                    openMainView(nome, "Administrador");
                     return;
                 } else if(nome.equals("user") && senha.equals("user")){
+                    dispose();
                     openMainView(nome, "funcionario");
                     return;
                 }

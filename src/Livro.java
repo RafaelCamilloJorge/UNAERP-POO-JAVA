@@ -15,6 +15,16 @@ public class Livro {
     private boolean disponivel;
     private Integer prazoEmprestimo;
 
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    private boolean ativo;
+
     public Livro(){}
 
     public Livro(String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo) {
@@ -24,6 +34,7 @@ public class Livro {
         this.isbn = isbn;
         this.disponivel = disponivel;
         this.prazoEmprestimo = prazoEmprestimo;
+        this.ativo = true;
     }
 
     public Livro(Integer id, String titulo, String autor, String categoria, String isbn, boolean disponivel, int prazoEmprestimo){
@@ -34,6 +45,7 @@ public class Livro {
         this.isbn = isbn;
         this.disponivel = disponivel;
         this.prazoEmprestimo = prazoEmprestimo;
+        this.ativo = true;
     }
 
     public int getID(){

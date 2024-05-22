@@ -30,10 +30,11 @@ public class LivroDAO {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Livro livro = session.get(Livro.class, id);
+            livro.setAtivo(false);
             if (livro == null) {
                 System.out.println("Livro com ID " + id + " não encontrado para remoção.");
             } else {
-                session.delete(livro);
+                session.persist(livro);
                 transaction.commit();
                 System.out.println("Livro removido com sucesso.");
             }
@@ -48,7 +49,7 @@ public class LivroDAO {
     public static List<Livro> getLivros() {
         List<Livro> livros = new ArrayList<>();
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Livro> query = session.createQuery("FROM Livro", Livro.class);
+            Query<Livro> query = session.createQuery("FROM Livro where ativo = true", Livro.class);
             livros = query.list();
         } catch (Exception e) {
             System.out.println("Erro ao obter livros: " + e.getMessage());
@@ -84,7 +85,7 @@ public class LivroDAO {
     public static List<Livro> buscarLivros(String nomeLivro, String autor, String genero, String ISBN) {
         List<Livro> livros = new ArrayList<>();
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Livro WHERE lower(titulo) LIKE :nomeLivro ");
+            StringBuilder hql = new StringBuilder("FROM Livro WHERE lower(titulo) LIKE :nomeLivro AND ativo = true ");
 
             if (autor != null && !autor.isEmpty()) {
                 hql.append("AND lower(autor) LIKE :autor ");
@@ -115,15 +116,15 @@ public class LivroDAO {
         return livros;
     }
 
-    public static boolean isISBNUtilizado(String isbn) {
+    public static Livro isISBNUtilizado(String isbn) {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM Livro WHERE isbn = :isbn", Long.class);
+            Query query = session.createQuery("FROM Livro WHERE isbn = :isbn", Livro.class);
             query.setParameter("isbn", isbn);
-            Long count = query.uniqueResult();
-            return count != null && count > 0;
+            Livro livro = (Livro) query.uniqueResult();
+            return livro;
         } catch (Exception e) {
             System.out.println("Erro ao verificar se o ISBN é utilizado: " + e.getMessage());
-            return false;
+            return null;
         }
     }
 
@@ -155,5 +156,6 @@ public class LivroDAO {
             System.out.println("Erro ao editar livro: " + e.getMessage());
         }
     }
+
 
 }

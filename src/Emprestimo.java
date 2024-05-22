@@ -25,13 +25,17 @@ public class Emprestimo implements Serializable {
     @Column(name = "data_devolucao", nullable = true)
     private String dataDevolucao;
 
+    @Column(name = "data_devolucao_prevista", nullable = true)
+    private String dataDevolucaoPrevista;
+
     public Emprestimo() {}
 
-    public Emprestimo(Cliente cliente, Livro livro, String dataEmprestimo, String dataDevolucao) {
+    public Emprestimo(Cliente cliente, Livro livro, String dataEmprestimo, String dataDevolucao, String dataDevolucaoPrevista) {
         this.cliente = cliente;
         this.livro = livro;
         this.dataEmprestimo = dataEmprestimo;
         this.dataDevolucao = dataDevolucao;
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
     }
 
     public int getId() {
@@ -72,5 +76,12 @@ public class Emprestimo implements Serializable {
 
     public void setDataDevolucao(String dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
+    }
+
+    public void setDataDevolucaoPrevista(String dataDevolucaoPrevista) {
+        this.dataDevolucaoPrevista = dataDevolucaoPrevista;
+    }
+    public String getDataDevolucaoPrevista() {
+        return dataDevolucaoPrevista;
     }
 }

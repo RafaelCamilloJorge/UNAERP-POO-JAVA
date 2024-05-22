@@ -14,7 +14,7 @@ public class EmprestimoController {
         this.livroDAO = livroDAO;
     }
 
-    public void emprestar(int idCliente, int idLivro, String dataEmprestimo, String dataDevolucao) {
+    public void emprestar(int idCliente, int idLivro, String dataEmprestimo, String dataDevolucao, String dataDevolucaoPrevista) {
         Cliente cliente = clienteDAO.getClientePorID(idCliente);
         Livro livro = livroDAO.getLivroPorID(idLivro);
         if(!livro.isDisponivel()){
@@ -22,7 +22,7 @@ public class EmprestimoController {
             return;
         }
         if (cliente != null && livro != null) {
-            Emprestimo emprestimo = new Emprestimo(cliente, livro, dataEmprestimo, dataDevolucao);
+            Emprestimo emprestimo = new Emprestimo(cliente, livro, dataEmprestimo, dataDevolucao, dataDevolucaoPrevista);
             EmprestimoDAO.adicionarEmprestimo(emprestimo);
             livro.setDisponivel(false);
             LivroDAO.editarLivro(livro);

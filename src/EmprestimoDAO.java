@@ -2,6 +2,8 @@ import jakarta.persistence.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class EmprestimoDAO {
@@ -86,4 +88,33 @@ public class EmprestimoDAO {
         }
         return emprestimos;
     }
+
+    public static Emprestimo getUltimoEmprestimoPorLivro(Livro livro) {
+        Emprestimo emprestimo = null;
+        try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
+            Query query = session.createQuery("FROM Emprestimo WHERE livro = :livro AND dataDevolucao is null", Emprestimo.class);
+            query.setParameter("livro", livro);
+            query.setMaxResults(1);
+            emprestimo = (Emprestimo) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Erro ao obter último empréstimo do livro: " + e.getMessage());
+        }
+        return emprestimo;
+    }
+
+    public static void devolverEmprestimo(Emprestimo emprestimo, Livro livro) {
+        Transaction transaction = null;
+        try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            emprestimo.setDataDevolucao(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            session.update(emprestimo);
+            System.out.println("Emprestimo devolvido com sucesso.");
+            transaction.commit();
+            livro.setDisponivel(true);
+            LivroDAO.editarLivro(livro);
+        } catch (Exception e) {
+            System.out.println("Erro ao devolver emprestimo: " + e.getMessage());
+        }
+    }
+
 }

@@ -12,7 +12,7 @@ public class HistoricoEmprestimoModal extends JDialog {
         this.livro = livro;
 
         setTitle("Histórico de Empréstimos do Livro: " + livro.getTitulo());
-        setSize(500, 300);
+        setSize(750, 300);
         setLayout(new BorderLayout());
 
         tblHistorico = new JTable();
@@ -24,7 +24,7 @@ public class HistoricoEmprestimoModal extends JDialog {
     private void carregarHistorico() {
         List<Emprestimo> emprestimos = EmprestimoDAO.getEmprestimosPorLivro(livro);
 
-        String[] columnNames = { "Cliente", "Telefone", "Data de Empréstimo", "Data de Devolução" };
+        String[] columnNames = { "Cliente", "Telefone", "Data de Empréstimo", "Data de Devolução", "Data de Devolucao Limite" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -34,7 +34,7 @@ public class HistoricoEmprestimoModal extends JDialog {
 
         for (Emprestimo emprestimo : emprestimos) {
             Cliente cliente = ClienteDAO.getClientePorID(emprestimo.getCliente().getId());
-            Object[] rowData = { cliente.getNome(), cliente.getTelefone(), emprestimo.getDataEmprestimo(), emprestimo.getDataDevolucao() };
+            Object[] rowData = { cliente.getNome(), cliente.getTelefone(), emprestimo.getDataEmprestimo(), emprestimo.getDataDevolucao(), emprestimo.getDataDevolucaoPrevista() };
             model.addRow(rowData);
         }
 
