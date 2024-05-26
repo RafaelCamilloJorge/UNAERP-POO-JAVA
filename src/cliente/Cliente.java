@@ -1,3 +1,5 @@
+package cliente;
+
 import jakarta.persistence.*;
 
 @Entity

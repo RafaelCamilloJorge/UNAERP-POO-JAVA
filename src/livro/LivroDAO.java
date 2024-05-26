@@ -1,6 +1,9 @@
+package livro;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import util.Conexao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +63,7 @@ public class LivroDAO {
     public static List<Livro> getLivros() {
         List<Livro> livros = new ArrayList<>();
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Livro> query = session.createQuery("FROM Livro where ativo = true", Livro.class);
+            Query<Livro> query = session.createQuery("FROM livro where ativo = true", Livro.class);
             livros = query.list();
         } catch (Exception e) {
             System.out.println("Erro ao obter livros: " + e.getMessage());
@@ -84,7 +87,7 @@ public class LivroDAO {
     public static List<Livro> buscarLivrosPorNome(String nomeLivro) {
         List<Livro> livros = new ArrayList<>();
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Livro> query = session.createQuery("FROM Livro WHERE lower(titulo) LIKE :nomeLivro", Livro.class);
+            Query<Livro> query = session.createQuery("FROM livro WHERE lower(titulo) LIKE :nomeLivro", Livro.class);
             query.setParameter("nomeLivro", "%" + nomeLivro.toLowerCase() + "%");
             livros = query.list();
         } catch (Exception e) {
@@ -129,7 +132,7 @@ public class LivroDAO {
 
     public static Livro isISBNUtilizado(String isbn) {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query query = session.createQuery("FROM Livro WHERE isbn = :isbn", Livro.class);
+            Query query = session.createQuery("FROM livro WHERE isbn = :isbn", Livro.class);
             query.setParameter("isbn", isbn);
             Livro livro = (Livro) query.uniqueResult();
             return livro;
@@ -141,7 +144,7 @@ public class LivroDAO {
 
     public static boolean isDisponivel(int id) {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM Livro WHERE id = :id", Long.class);
+            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM livro WHERE id = :id", Long.class);
             query.setParameter("id", id);
             Long count = query.uniqueResult();
             return count != null && count > 0;

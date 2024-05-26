@@ -1,3 +1,10 @@
+package util;
+
+import cliente.Cliente;
+import emprestimo.Emprestimo;
+import livro.Livro;
+import usuario.Usuario;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;

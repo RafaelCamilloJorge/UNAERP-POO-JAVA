@@ -1,6 +1,9 @@
+package usuario;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import util.Conexao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +69,7 @@ public class UsuarioDAO {
     public static Usuario buscarUsuario(String nomeUsuario, String senha) {
         Usuario usuario = null;
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Usuario> query = session.createQuery("FROM Usuario WHERE lower(nome) = :nomeUsuario AND lower(senha) = :senha ", Usuario.class);
+            Query<Usuario> query = session.createQuery("FROM usuario WHERE lower(nome) = :nomeUsuario AND lower(senha) = :senha ", Usuario.class);
             query.setParameter("nomeUsuario", nomeUsuario.toLowerCase());
             query.setParameter("senha", senha.toLowerCase());
             usuario = query.uniqueResult();
@@ -79,7 +82,7 @@ public class UsuarioDAO {
     public static List<Usuario> buscarUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Usuario> query = session.createQuery("FROM Usuario", Usuario.class);
+            Query<Usuario> query = session.createQuery("FROM usuario", Usuario.class);
             usuarios = query.list();
         } catch (Exception e) {
             System.out.println("Erro ao buscar usuários por nome: " + e.getMessage());

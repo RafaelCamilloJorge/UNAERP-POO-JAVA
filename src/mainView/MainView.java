@@ -1,3 +1,10 @@
+package mainView;
+
+import cliente.ClienteDAO;
+import emprestimo.*;
+import livro.*;
+import usuario.ManipularUsuarioView;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -128,7 +135,7 @@ public class MainView extends JFrame implements LivroListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Livro livro = new Livro("", "", "", "", true, 0);
-                ManipularLivroModal cadastroLivro = new ManipularLivroModal(MainView.this, "Cadastrar Livro", livro);
+                ManipularLivroView cadastroLivro = new ManipularLivroView(MainView.this, "Cadastrar Livro", livro);
                 cadastroLivro.setVisible(true);
             carregarLivros("", "", "", "");
             }
@@ -151,7 +158,7 @@ public class MainView extends JFrame implements LivroListener {
 
                     Livro livro = new Livro(id, titulo, autor, categoria, isbn, disponivel, prazoEmprestimo);
 
-                    ManipularLivroModal editLivro = new ManipularLivroModal(MainView.this,"Editar Livro", livro);
+                    ManipularLivroView editLivro = new ManipularLivroView(MainView.this,"Editar Livro", livro);
                     editLivro.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(MainView.this, "Por favor, selecione uma linha para editar.");
@@ -178,7 +185,7 @@ public class MainView extends JFrame implements LivroListener {
         btnUsuario.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ManipularUsuarioModal usuarioModal = new ManipularUsuarioModal(MainView.this);
+                ManipularUsuarioView usuarioModal = new ManipularUsuarioView(MainView.this);
                 usuarioModal.setVisible(true);
             }
         });
@@ -195,7 +202,7 @@ public class MainView extends JFrame implements LivroListener {
                     if (livro != null) {
                         ClienteDAO clienteDAO = new ClienteDAO();
                         LivroDAO livroDAO = new LivroDAO();
-                        EmprestimoModal emprestimoModal = new EmprestimoModal(MainView.this, true, livro, clienteDAO, livroDAO);
+                        EmprestimoView emprestimoModal = new EmprestimoView(MainView.this, true, livro, clienteDAO, livroDAO);
                         emprestimoModal.setLocationRelativeTo(null);
                         emprestimoModal.setVisible(true);
                     } else {
@@ -251,7 +258,7 @@ public class MainView extends JFrame implements LivroListener {
             livros = LivroDAO.buscarLivros(nomeLivro, autor, genero, ISBN);
         }
 
-        String[] columnNames = { "ID", "Título", "Autor", "Categoria", "ISBN", "Status", "Prazo Emprestimo" };
+        String[] columnNames = { "ID", "Título", "Autor", "Categoria", "ISBN", "Status", "Prazo Emprestimo (dias)" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

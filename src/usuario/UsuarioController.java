@@ -1,10 +1,12 @@
+package usuario;
+
 import javax.swing.*;
 
 public class UsuarioController {
-    private final ManipularUsuarioModal manipularUsuarioModal;
+    private final ManipularUsuarioView manipularUsuarioModal;
     private final UsuarioDAO usuarioDAO;
 
-    public UsuarioController(ManipularUsuarioModal manipularUsuarioModal, UsuarioDAO usuarioDAO){
+    public UsuarioController(ManipularUsuarioView manipularUsuarioModal, UsuarioDAO usuarioDAO){
         this.manipularUsuarioModal = manipularUsuarioModal;
         this.usuarioDAO = usuarioDAO;
     }

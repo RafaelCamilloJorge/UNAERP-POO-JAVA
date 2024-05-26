@@ -1,10 +1,12 @@
+package cliente;
+
 import javax.swing.*;
 
 public class ClienteController {
     private ClienteDAO clienteDAO;
-    private ManipularClienteModal manipularClienteModal;
+    private ManipularClienteView manipularClienteModal;
 
-    public ClienteController(ClienteDAO clienteDAO, ManipularClienteModal manipularClienteModal) {
+    public ClienteController(ClienteDAO clienteDAO, ManipularClienteView manipularClienteModal) {
         this.clienteDAO = clienteDAO;
         this.manipularClienteModal = manipularClienteModal;
     }
@@ -31,7 +33,7 @@ public class ClienteController {
         }
 
         clienteDAO.adicionarCliente(cliente);
-        JOptionPane.showMessageDialog(manipularClienteModal, "Cliente criado com sucesso");
+        JOptionPane.showMessageDialog(manipularClienteModal, "Cliente.Cliente criado com sucesso");
         manipularClienteModal.dispose();
     }
 

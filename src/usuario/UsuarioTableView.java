@@ -1,3 +1,5 @@
+package usuario;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -5,12 +7,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class UsuarioTableModal extends JDialog {
+public class UsuarioTableView extends JDialog {
 
     private UsuarioSelectionListener usuarioSelectionListener;
     private JTable table;
 
-    public UsuarioTableModal(JDialog owner, boolean modal, UsuarioSelectionListener usuarioSelectionListener) {
+    public UsuarioTableView(JDialog owner, boolean modal, UsuarioSelectionListener usuarioSelectionListener) {
         super(owner, modal);
         this.usuarioSelectionListener = usuarioSelectionListener;
 

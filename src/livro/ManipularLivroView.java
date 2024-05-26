@@ -1,3 +1,5 @@
+package livro;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class ManipularLivroModal extends JDialog {
+public class ManipularLivroView extends JDialog {
 
     private LivroController livroController;
     private LivroDAO livroDAO;
@@ -28,7 +30,7 @@ public class ManipularLivroModal extends JDialog {
 
     private JButton btnButton;
 
-    public ManipularLivroModal(JFrame parent, String tituloTela, Livro livro) {
+    public ManipularLivroView(JFrame parent, String tituloTela, Livro livro) {
         super(parent, tituloTela, true);
         setSize(400, 300);
 

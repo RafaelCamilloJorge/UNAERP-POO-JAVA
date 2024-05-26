@@ -1,10 +1,12 @@
+package livro;
+
 import javax.swing.*;
 
     public class LivroController {
-        private final ManipularLivroModal manipularLivroModal;
+        private final ManipularLivroView manipularLivroModal;
         private final LivroDAO livroDAO;
 
-        public LivroController(ManipularLivroModal manipularLivroModal, LivroDAO livroDAO){
+        public LivroController(ManipularLivroView manipularLivroModal, LivroDAO livroDAO){
             this.manipularLivroModal = manipularLivroModal;
             this.livroDAO = livroDAO;
         }

@@ -1,10 +1,12 @@
+package cliente;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ManipularClienteModal extends JDialog {
+public class ManipularClienteView extends JDialog {
 
     private ClienteController clienteController;
 
@@ -13,12 +15,12 @@ public class ManipularClienteModal extends JDialog {
     private JTextField txtTelefone;
     private JButton btnCriar;
 
-    public ManipularClienteModal(JFrame owner, boolean modal) {
+    public ManipularClienteView(JFrame owner, boolean modal) {
         super(owner, modal);
 
         clienteController = new ClienteController(new ClienteDAO(), this);
 
-        setTitle("Criar Cliente");
+        setTitle("Criar Cliente.Cliente");
         setSize(300, 200);
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
         Border border = BorderFactory.createEmptyBorder(10, 10, 10, 10);

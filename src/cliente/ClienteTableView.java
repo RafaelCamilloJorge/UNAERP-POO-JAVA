@@ -1,3 +1,5 @@
+package cliente;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class ClienteTableModal extends JDialog implements ClienteListener{
+public class ClienteTableView extends JDialog implements ClienteListener{
 
     private JLabel labelNome;
     private JTextField dfsNome;
@@ -17,12 +19,12 @@ public class ClienteTableModal extends JDialog implements ClienteListener{
     private ClienteDAO clienteDAO;
     private ClienteSelectionListener clienteSelectionListener;
 
-    public ClienteTableModal(JFrame owner, boolean modal, ClienteDAO clienteDAO,  ClienteSelectionListener clienteSelectionListener) {
+    public ClienteTableView(JFrame owner, boolean modal, ClienteDAO clienteDAO, ClienteSelectionListener clienteSelectionListener) {
         super(owner, modal);
         this.clienteDAO = clienteDAO;
         this.clienteSelectionListener = clienteSelectionListener;
 
-        setTitle("Buscar Cliente");
+        setTitle("Buscar Cliente.Cliente");
         setSize(500, 300);
         setLayout(new GridLayout(2, 4));
 
@@ -51,7 +53,7 @@ public class ClienteTableModal extends JDialog implements ClienteListener{
         btnCadastrarCliente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ManipularClienteModal modal = new ManipularClienteModal(null, true);
+                ManipularClienteView modal = new ManipularClienteView(null, true);
                 modal.setLocationRelativeTo(null);
                 modal.setVisible(true);
                 buscarClientes();

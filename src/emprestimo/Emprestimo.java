@@ -1,7 +1,10 @@
+package emprestimo;
+
+import cliente.Cliente;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Date;
+
+import livro.*;
 
 @Entity
 @Table(name = "emprestimos")

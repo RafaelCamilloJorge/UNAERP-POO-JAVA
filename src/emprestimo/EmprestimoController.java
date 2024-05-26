@@ -1,14 +1,18 @@
-import jakarta.persistence.*;
+package emprestimo;
+
+import cliente.Cliente;
+import cliente.ClienteDAO;
 
 import javax.swing.*;
-import java.time.LocalDate;
+
+import livro.*;
 
 public class EmprestimoController {
-    private EmprestimoModal emprestimoModal;
+    private EmprestimoView emprestimoModal;
     private ClienteDAO clienteDAO;
     private LivroDAO livroDAO;
 
-    public EmprestimoController(EmprestimoModal emprestimoModal, ClienteDAO clienteDAO, LivroDAO livroDAO) {
+    public EmprestimoController(EmprestimoView emprestimoModal, ClienteDAO clienteDAO, LivroDAO livroDAO) {
         this.emprestimoModal = emprestimoModal;
         this.clienteDAO = clienteDAO;
         this.livroDAO = livroDAO;
@@ -29,7 +33,7 @@ public class EmprestimoController {
             JOptionPane.showMessageDialog(emprestimoModal, "Empréstimo realizado com sucesso.");
             emprestimoModal.dispose();
         } else {
-            JOptionPane.showMessageDialog(emprestimoModal, "Cliente ou livro não encontrado.");
+            JOptionPane.showMessageDialog(emprestimoModal, "Cliente.Cliente ou livro não encontrado.");
         }
     }
 }

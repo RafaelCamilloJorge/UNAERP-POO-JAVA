@@ -1,10 +1,11 @@
+package usuario;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionListener{
+public class ManipularUsuarioView extends JDialog implements UsuarioSelectionListener{
 
     private UsuarioController usuarioController;
     private UsuarioDAO usuarioDAO;
@@ -23,7 +24,7 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
     private JButton btnTabela;
     private int idUser;
 
-    public ManipularUsuarioModal(JFrame parent) {
+    public ManipularUsuarioView(JFrame parent) {
         super(parent, true);
         setSize(400, 250);
         setTitle("Usuarios");
@@ -119,7 +120,7 @@ public class ManipularUsuarioModal extends JDialog implements UsuarioSelectionLi
     }
 
     private void exibirTabela() {
-        UsuarioTableModal tabelaDialog = new UsuarioTableModal(this, true, this);
+        UsuarioTableView tabelaDialog = new UsuarioTableView(this, true, this);
         tabelaDialog.setLocationRelativeTo(null);
         tabelaDialog.setVisible(true);
     }

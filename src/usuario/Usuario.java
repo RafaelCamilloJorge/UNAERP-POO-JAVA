@@ -1,3 +1,5 @@
+package usuario;
+
 import jakarta.persistence.*;
 
 @Entity

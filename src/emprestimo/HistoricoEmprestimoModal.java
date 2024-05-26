@@ -1,7 +1,13 @@
+package emprestimo;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+
+import cliente.Cliente;
+import cliente.ClienteDAO;
+import livro.*;
 
 public class HistoricoEmprestimoModal extends JDialog {
     private Livro livro;
@@ -24,7 +30,7 @@ public class HistoricoEmprestimoModal extends JDialog {
     private void carregarHistorico() {
         List<Emprestimo> emprestimos = EmprestimoDAO.getEmprestimosPorLivro(livro);
 
-        String[] columnNames = { "Cliente", "Telefone", "Data de Empréstimo", "Data de Devolução", "Data de Devolucao Limite" };
+        String[] columnNames = {"cliente", "Telefone", "Data de Empréstimo", "Data de Devolução", "Data de Devolucao Limite" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

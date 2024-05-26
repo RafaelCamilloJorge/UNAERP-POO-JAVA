@@ -1,3 +1,5 @@
+package emprestimo;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
@@ -6,8 +8,11 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import cliente.*;
+import livro.*;
+import mainView.MainView;
 
-public class EmprestimoModal extends JDialog implements ClienteSelectionListener {
+public class EmprestimoView extends JDialog implements ClienteSelectionListener {
     private JLabel lblLivro;
     private JLabel lblCliente;
     private JLabel lblDataDevolucao;
@@ -25,7 +30,7 @@ public class EmprestimoModal extends JDialog implements ClienteSelectionListener
     private ClienteDAO clienteDAO;
     private LivroDAO livroDAO;
 
-    public EmprestimoModal(JFrame owner, boolean modal, Livro livro, ClienteDAO clienteDAO, LivroDAO livroDAO) {
+    public EmprestimoView(JFrame owner, boolean modal, Livro livro, ClienteDAO clienteDAO, LivroDAO livroDAO) {
         super(owner, modal);
         this.livro = livro;
         this.clienteDAO = clienteDAO;
@@ -104,7 +109,7 @@ public class EmprestimoModal extends JDialog implements ClienteSelectionListener
         btnBuscarCliente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ClienteTableModal clienteTableModal = new ClienteTableModal(null, true, clienteDAO, EmprestimoModal.this);
+                ClienteTableView clienteTableModal = new ClienteTableView(null, true, clienteDAO, EmprestimoView.this);
                 clienteTableModal.setLocationRelativeTo(null);
                 clienteTableModal.setVisible(true);
             }
