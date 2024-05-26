@@ -9,7 +9,7 @@ import java.util.List;
 
 
 
-public class MainView extends JFrame {
+public class MainView extends JFrame implements LivroListener {
     private JPanel navPanel;
     private JPanel panelTabela;
     private JPanel panelButtons;
@@ -37,6 +37,8 @@ public class MainView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        LivroDAO.subscribe(this);
 
         navPanel = new JPanel(new FlowLayout());
         add(navPanel, BorderLayout.PAGE_START);
@@ -264,5 +266,10 @@ public class MainView extends JFrame {
         }
 
         tableLivros.setModel(model);
+    }
+
+    @Override
+    public void carregarTabela() {
+        carregarLivros("", "", "", "");
     }
 }

@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class ClienteTableModal extends JDialog {
+public class ClienteTableModal extends JDialog implements ClienteListener{
 
     private JLabel labelNome;
     private JTextField dfsNome;
@@ -89,5 +89,9 @@ public class ClienteTableModal extends JDialog {
         tblClientes.setModel(model);
     }
 
+    @Override
+    public void carregarTabela() {
+        buscarClientes();
+    }
 }
 

@@ -2,14 +2,23 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LivroDAO {
+
+    private static final List<LivroListener> listeners = new ArrayList<>();
+
+    public static void subscribe(LivroListener livroListener) {
+        listeners.add(livroListener);
+    }
+
+    private static void notifyDataChanged() {
+        for(LivroListener listener : listeners) {
+            listener.carregarTabela();
+        }
+    }
+
     public static void adicionarLivro(Livro livro) {
         Transaction transaction = null;
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
@@ -17,6 +26,7 @@ public class LivroDAO {
             session.persist(livro);
             transaction.commit();
             System.out.println("Book inserted successfully.");
+            notifyDataChanged();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -32,11 +42,12 @@ public class LivroDAO {
             Livro livro = session.get(Livro.class, id);
             livro.setAtivo(false);
             if (livro == null) {
-                System.out.println("Livro com ID " + id + " não encontrado para remoção.");
+                System.out.println("Livro.Livro com ID " + id + " não encontrado para remoção.");
             } else {
                 session.persist(livro);
                 transaction.commit();
-                System.out.println("Livro removido com sucesso.");
+                System.out.println("Livro.Livro removido com sucesso.");
+                notifyDataChanged();
             }
         } catch (Exception e) {
             if (transaction != null) {
@@ -61,7 +72,7 @@ public class LivroDAO {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
             Livro livro = session.get(Livro.class, id);
             if (livro == null) {
-                System.out.println("Livro com ID " + id + " não encontrado.");
+                System.out.println("Livro.Livro com ID " + id + " não encontrado.");
             }
             return livro;
         } catch (Exception e) {
@@ -85,7 +96,7 @@ public class LivroDAO {
     public static List<Livro> buscarLivros(String nomeLivro, String autor, String genero, String ISBN) {
         List<Livro> livros = new ArrayList<>();
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Livro WHERE lower(titulo) LIKE :nomeLivro AND ativo = true ");
+            StringBuilder hql = new StringBuilder("FROM Livro.Livro WHERE lower(titulo) LIKE :nomeLivro AND ativo = true ");
 
             if (autor != null && !autor.isEmpty()) {
                 hql.append("AND lower(autor) LIKE :autor ");
@@ -148,7 +159,8 @@ public class LivroDAO {
             transaction = session.beginTransaction();
             session.update(livro);
             transaction.commit();
-            System.out.println("Livro editado com sucesso.");
+            System.out.println("Livro.Livro editado com sucesso.");
+            notifyDataChanged();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
