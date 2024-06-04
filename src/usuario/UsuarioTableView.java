@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class UsuarioTableView extends JDialog{
+public class UsuarioTableView extends JDialog implements UsuarioListener{
 
     private UsuarioSelectionListener usuarioSelectionListener;
     private JTable table;
@@ -55,4 +55,19 @@ public class UsuarioTableView extends JDialog{
     }
 
 
+    @Override
+    public void carregarTabela() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+
+        List<Usuario> usuarios = UsuarioDAO.buscarUsuarios();
+
+        for (Usuario usuario : usuarios) {
+            Object[] row = new Object[3];
+            row[0] = usuario.getId();
+            row[1] = usuario.getNome();
+            row[2] = usuario.getCargo();
+            model.addRow(row);
+        }
+    }
 }

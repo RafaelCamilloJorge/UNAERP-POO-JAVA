@@ -11,6 +11,18 @@ import java.util.List;
 
 public class UsuarioDAO {
 
+    private static final List<UsuarioListener> listeners = new ArrayList<>();
+
+    public static void subscribe(UsuarioListener UsuarioListener) {
+        listeners.add(UsuarioListener);
+    }
+
+    private static void notifyDataChanged() {
+        for(UsuarioListener UsuarioListener : listeners) {
+            UsuarioListener.carregarTabela();
+        }
+    }
+
     public static void cadastrarUsuario(Usuario usuario) {
         Transaction transaction = null;
         Session session = null;
@@ -19,7 +31,7 @@ public class UsuarioDAO {
             transaction = session.beginTransaction();
             session.persist(usuario);
             transaction.commit();
-
+            notifyDataChanged();
             System.out.println("Usuário cadastrado com sucesso.");
         } catch (Exception e) {
             if (transaction != null) {
@@ -43,7 +55,7 @@ public class UsuarioDAO {
             } else {
                 session.delete(usuario);
                 transaction.commit();
-
+                notifyDataChanged();
                 System.out.println("Usuário removido com sucesso.");
             }
         } catch (Exception e) {
@@ -60,7 +72,7 @@ public class UsuarioDAO {
             transaction = session.beginTransaction();
             session.update(usuario);
             transaction.commit();
-
+            notifyDataChanged();
             System.out.println("Usuário editado com sucesso.");
         } catch (Exception e) {
             if (transaction != null) {
