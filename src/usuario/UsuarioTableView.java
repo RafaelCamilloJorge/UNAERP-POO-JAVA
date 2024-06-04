@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class UsuarioTableView extends JDialog {
+public class UsuarioTableView extends JDialog{
 
     private UsuarioSelectionListener usuarioSelectionListener;
     private JTable table;
@@ -53,4 +53,6 @@ public class UsuarioTableView extends JDialog {
         add(scrollPane, BorderLayout.CENTER);
         pack();
     }
+
+
 }

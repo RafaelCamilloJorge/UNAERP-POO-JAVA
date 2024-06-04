@@ -24,7 +24,7 @@ public class ClienteTableView extends JDialog implements ClienteListener{
         this.clienteDAO = clienteDAO;
         this.clienteSelectionListener = clienteSelectionListener;
 
-        setTitle("Buscar Cliente.Cliente");
+        setTitle("Buscar Cliente");
         setSize(500, 300);
         setLayout(new GridLayout(2, 4));
 

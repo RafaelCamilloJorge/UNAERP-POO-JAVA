@@ -71,7 +71,7 @@ public class ClienteDAO {
 
     public static List<Cliente> getClientes() {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            return session.createQuery("from cliente", Cliente.class).list();
+            return session.createQuery("FROM Cliente", Cliente.class).list();
         } catch (Exception e) {
             System.out.println("Error fetching clients: " + e.getMessage());
             return new ArrayList<>();
@@ -89,7 +89,7 @@ public class ClienteDAO {
 
     public static List<Cliente> getClientePorNome(String nomeCliente) {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Cliente> query = session.createQuery("FROM cliente WHERE lower(nome) LIKE :nome", Cliente.class);
+            Query<Cliente> query = session.createQuery("FROM Cliente WHERE lower(nome) LIKE :nome", Cliente.class);
             query.setParameter("nome", "%" + nomeCliente.toLowerCase() + "%");
             return query.list();
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class ClienteDAO {
 
     public static boolean isCPFUtilizado(String cpf) {
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Cliente> query = session.createQuery("from cliente where cpf = :cpf", Cliente.class);
+            Query<Cliente> query = session.createQuery("from Cliente where cpf = :cpf", Cliente.class);
             query.setParameter("cpf", cpf);
             return !query.list().isEmpty();
         } catch (Exception e) {

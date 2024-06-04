@@ -1,5 +1,6 @@
 package usuario;
 
+import livro.LivroListener;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -18,6 +19,7 @@ public class UsuarioDAO {
             transaction = session.beginTransaction();
             session.persist(usuario);
             transaction.commit();
+
             System.out.println("Usuário cadastrado com sucesso.");
         } catch (Exception e) {
             if (transaction != null) {
@@ -41,6 +43,7 @@ public class UsuarioDAO {
             } else {
                 session.delete(usuario);
                 transaction.commit();
+
                 System.out.println("Usuário removido com sucesso.");
             }
         } catch (Exception e) {
@@ -57,6 +60,7 @@ public class UsuarioDAO {
             transaction = session.beginTransaction();
             session.update(usuario);
             transaction.commit();
+
             System.out.println("Usuário editado com sucesso.");
         } catch (Exception e) {
             if (transaction != null) {
@@ -69,7 +73,7 @@ public class UsuarioDAO {
     public static Usuario buscarUsuario(String nomeUsuario, String senha) {
         Usuario usuario = null;
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Usuario> query = session.createQuery("FROM usuario WHERE lower(nome) = :nomeUsuario AND lower(senha) = :senha ", Usuario.class);
+            Query<Usuario> query = session.createQuery("FROM Usuario WHERE lower(nome) = :nomeUsuario AND lower(senha) = :senha ", Usuario.class);
             query.setParameter("nomeUsuario", nomeUsuario.toLowerCase());
             query.setParameter("senha", senha.toLowerCase());
             usuario = query.uniqueResult();
@@ -82,7 +86,7 @@ public class UsuarioDAO {
     public static List<Usuario> buscarUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         try (Session session = Conexao.getDatabaseSessionFactory().openSession()) {
-            Query<Usuario> query = session.createQuery("FROM usuario", Usuario.class);
+            Query<Usuario> query = session.createQuery("FROM Usuario", Usuario.class);
             usuarios = query.list();
         } catch (Exception e) {
             System.out.println("Erro ao buscar usuários por nome: " + e.getMessage());

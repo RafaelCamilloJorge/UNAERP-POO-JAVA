@@ -44,7 +44,6 @@ public class MainView extends JFrame implements LivroListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
         LivroDAO.subscribe(this);
 
         navPanel = new JPanel(new FlowLayout());

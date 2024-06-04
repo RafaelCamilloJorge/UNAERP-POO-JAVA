@@ -2,13 +2,12 @@ package emprestimo;
 
 import cliente.Cliente;
 import jakarta.persistence.*;
-import java.io.Serializable;
 
 import livro.*;
 
 @Entity
 @Table(name = "emprestimos")
-public class Emprestimo implements Serializable {
+public class Emprestimo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
